@@ -1,11 +1,11 @@
-from base import *
+from code.data._base import *
 import torchvision
 import torch
 from torch.utils.data import TensorDataset, DataLoader
 
 # Download and load datasets
-trainset = torchvision.datasets.CIFAR10(root='/database', train=True, download=True, transform=transform)
-testset = torchvision.datasets.CIFAR10(root='/database', train=False, download=True, transform=transform)
+trainset = torchvision.datasets.CIFAR10(root='../datasets', train=True, download=True, transform=transform)
+testset = torchvision.datasets.CIFAR10(root='../datasets', train=False, download=True, transform=transform)
 
 # Preload training data to memory
 train_data = torch.stack([trainset[i][0] for i in range(len(trainset))])

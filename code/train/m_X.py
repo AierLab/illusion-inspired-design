@@ -1,4 +1,4 @@
-from _base import *
+from ._base import *
 from data.indl_and_cifar100 import trainloader_combined, testloader_combined
 
 def main(model_name):

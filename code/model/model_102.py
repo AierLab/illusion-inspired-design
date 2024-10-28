@@ -1,4 +1,4 @@
-from code.model.model_100 import *
+from model import *
 
 class ModifiedModel(Model):
     def validation_step(self, batch, batch_idx):
@@ -13,7 +13,7 @@ class ModifiedModel(Model):
         acc_all = (preds_all == labels).float().mean()
 
         # Filter labels within the range of 0 to 9 (val_B)
-        valid_indices = (labels >= 0) & (labels <= 9)
+        valid_indices = (labels >= 0) & (labels <= 99)
 
         if valid_indices.any():
             valid_images = images[valid_indices]
@@ -33,7 +33,7 @@ class ModifiedModel(Model):
             acc_valid = None
 
         # Filter labels outside the range of 0 to 9 (val_exc for exclusive labels 10-11)
-        exc_indices = (labels >= 10) & (labels <= 11)
+        exc_indices = (labels >= 100) & (labels <= 101)
 
         if exc_indices.any():
             exc_images = images[exc_indices]

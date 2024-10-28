@@ -1,8 +1,9 @@
 from train._base import *
-from data.cifar10 import trainloader_cifar10, testloader_cifar10
+from model.model import *
+from data.cifar100 import trainloader_cifar100, testloader_cifar100
 
 # @hydra.main(version_base=None, config_path="code/config/train", config_name="m_B.yaml")
-def main():
+def main(model_name):
     # Initialize Wandb logger with a careful naming convention for the model
     wandb_logger = WandbLogger(project="illusion_augmented_models", name="model_m_B", log_model=True)
     # Experiment name and setup
@@ -11,7 +12,7 @@ def main():
     # Callbacks
     checkpoint_callback = ModelCheckpoint(
         monitor="val_acc",
-        dirpath="./models/m_B/",
+        dirpath="../models/m_B/",
         filename="m_B_{epoch:02d}-{val_acc:.2f}",
         save_top_k=1,
         mode="max",
@@ -27,7 +28,7 @@ def main():
     )
 
     # Path for latest checkpoint
-    checkpoint_dir = "./models/m_B/"
+    checkpoint_dir = "../models/m_B/"
     latest_checkpoint = None
 
     # Check if a checkpoint exists
@@ -40,7 +41,7 @@ def main():
             )
 
     # Training model instance
-    model = ResNet50(steps_per_epoch=len(trainloader_cifar10), num_classes=10, lr=1e-3)
+    model = Model(model_name, steps_per_epoch=len(trainloader_cifar100), num_classes=100, lr=1e-4)
 
     # Trainer configuration
     trainer = Trainer(
@@ -51,7 +52,5 @@ def main():
     )
 
     # Model training
-    trainer.fit(model, train_dataloaders=trainloader_cifar10, val_dataloaders=testloader_cifar10)
-
-if __name__ == "__main__":
-    main()
+    trainer.fit(model, train_dataloaders=trainloader_cifar100, val_dataloaders=testloader_cifar100)
+    

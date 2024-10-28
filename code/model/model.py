@@ -1,4 +1,4 @@
-from _base import *
+from ._base import *
 
 class Model(LightningModule):
     def __init__(self, model_name, steps_per_epoch, num_classes, lr):

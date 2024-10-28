@@ -1,12 +1,9 @@
-from ._base import *
+from model import *
 
-class ResNet50Modified(ResNet50):
-    def __init__(self, steps_per_epoch, num_classes=12, lr=1e-3):
-        super().__init__(steps_per_epoch, num_classes=num_classes, lr=lr)
-
+class ModifiedModel(Model):
     def validation_step(self, batch, batch_idx):
         images, labels = batch
-        
+
         # Forward pass for all images
         outputs = self(images)
 
@@ -16,7 +13,7 @@ class ResNet50Modified(ResNet50):
         acc_all = (preds_all == labels).float().mean()
 
         # Filter labels within the range of 0 to 9 (val_B)
-        valid_indices = (labels >= 0) & (labels <= 9)
+        valid_indices = (labels >= 0) & (labels <= 99)
 
         if valid_indices.any():
             valid_images = images[valid_indices]
@@ -36,7 +33,7 @@ class ResNet50Modified(ResNet50):
             acc_valid = None
 
         # Filter labels outside the range of 0 to 9 (val_exc for exclusive labels 10-11)
-        exc_indices = (labels >= 10) & (labels <= 11)
+        exc_indices = (labels >= 100) & (labels <= 101)
 
         if exc_indices.any():
             exc_images = images[exc_indices]
@@ -68,4 +65,3 @@ class ResNet50Modified(ResNet50):
             'val_all_loss': loss_all,
             'val_all_acc': acc_all,
         }
-
