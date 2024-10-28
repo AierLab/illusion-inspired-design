@@ -1,7 +1,7 @@
-from _base import *
+from train._base import *
 from data.cifar10 import trainloader_cifar10, testloader_cifar10
 
-
+# @hydra.main(version_base=None, config_path="code/config/train", config_name="m_B.yaml")
 def main():
     # Initialize Wandb logger with a careful naming convention for the model
     wandb_logger = WandbLogger(project="illusion_augmented_models", name="model_m_B", log_model=True)

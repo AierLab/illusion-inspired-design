@@ -29,7 +29,7 @@ Ensure you have Python 3 installed and the required modules, `generator` and `pl
 
    Using relative paths:
    ```bash
-   python main.py --train_dir ./datasets/indl/train --test_dir ./datasets/indl/test
+   python main.py --train_dir ../indl/train --test_dir ../indl/test
    ```
 
    Using absolute paths:
