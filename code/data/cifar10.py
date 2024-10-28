@@ -1,4 +1,4 @@
-from data_base import *
+from base import *
 import torchvision
 import torch
 from torch.utils.data import TensorDataset, DataLoader
