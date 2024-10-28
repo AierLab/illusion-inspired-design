@@ -3,8 +3,8 @@ import torch
 from torch.utils.data import DataLoader, TensorDataset
 
 # Paths to save or load the combined dataset
-train_pth_file = "/database/indl/train/combined_trainset.pth"
-test_pth_file = "/database/indl/test/combined_testset.pth"
+train_pth_file = "datasets/indl/train/combined_trainset.pth"
+test_pth_file = "datasets/indl/test/combined_testset.pth"
 
 
 if os.path.exists(train_pth_file) and os.path.exists(test_pth_file):
@@ -28,8 +28,8 @@ else:
     # Loop through dataset folders and collect datasets
     for dataset_folder in ["dataset01", "dataset02", "dataset03", "dataset04", "dataset05"]:
         # Paths to data directories
-        train_data_dir = f"/database/indl/train/{dataset_folder}"
-        test_data_dir = f"/database/indl/test/{dataset_folder}"
+        train_data_dir = f"datasets/indl/train/{dataset_folder}"
+        test_data_dir = f"datasets/indl/test/{dataset_folder}"
         
         # Create instances of MyDataset
         trainset = MyDataset(train_data_dir, transforms=transform)  # No transforms yet

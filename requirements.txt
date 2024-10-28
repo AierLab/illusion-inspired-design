@@ -1,0 +1,15 @@
+imageio[ffmpeg,pyav]
+jupyter
+matplotlib
+opencv-python
+pandas
+pyllusion
+tqdm
+torch
+torchao
+torchvision
+transformers
+wandb
+timm
+scikit-learn
+lightning
