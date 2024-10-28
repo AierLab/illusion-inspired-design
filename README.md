@@ -1,4 +1,4 @@
-# RES
+# Illusion research
 
 pip install uv
 
