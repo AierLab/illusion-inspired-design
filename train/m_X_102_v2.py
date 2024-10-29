@@ -40,7 +40,7 @@ def main(model_name):
             )
 
     # Training model instance
-    model = ModifiedModel(model_name, steps_per_epoch=len(trainloader_combined), num_classes=103, lr=1e-4)
+    model = ModifiedModel(model_name, steps_per_epoch=len(trainloader_combined), num_classes=102, lr=1e-4)
 
     # Trainer configuration
     trainer = Trainer(
