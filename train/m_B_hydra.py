@@ -1,4 +1,4 @@
-from train._base import *
+from ._base import *
 from model.model import *
 from data.cifar100 import trainloader_cifar100, testloader_cifar100
 
@@ -12,7 +12,7 @@ def main(model_name):
     # Callbacks
     checkpoint_callback = ModelCheckpoint(
         monitor="val_acc",
-        dirpath="../models/m_B/",
+        dirpath="../tmp/models/m_B/",
         filename="m_B_{epoch:02d}-{val_acc:.2f}",
         save_top_k=1,
         mode="max",
@@ -28,7 +28,7 @@ def main(model_name):
     )
 
     # Path for latest checkpoint
-    checkpoint_dir = "../models/m_B/"
+    checkpoint_dir = "../tmp/models/m_B/"
     latest_checkpoint = None
 
     # Check if a checkpoint exists

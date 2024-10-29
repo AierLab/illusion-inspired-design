@@ -2,14 +2,14 @@ from .base import *
 from .data_cifar10 import trainloader_cifar10, testloader_cifar10
 
 # Initialize Wandb logger with a careful naming convention for the model
-wandb_logger = WandbLogger(project="illusion_augmented_models", name="model_m_B", log_model=True)
+wandb_logger = WandbLogger(project="illusion_augmented_models", save_dir="tmp", name="model_m_B", log_model=True)
 # Experiment name and setup
 exp_name = "illusion_augmented_image_classification_model"
 
 # Callbacks
 checkpoint_callback = ModelCheckpoint(
     monitor="val_acc",
-    dirpath="./models/m_B/",
+    dirpath="./tmp/models/m_B/",
     filename="m_B_{epoch:02d}-{val_acc:.2f}",
     save_top_k=1,
     mode="max",
@@ -25,7 +25,7 @@ early_stop_callback = EarlyStopping(
 )
 
 # Path for latest checkpoint
-checkpoint_dir = "./models/m_B/"
+checkpoint_dir = "./tmp/models/m_B/"
 latest_checkpoint = None
 
 # Check if a checkpoint exists

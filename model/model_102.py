@@ -1,4 +1,4 @@
-from model import *
+from .model import *
 
 class ModifiedModel(Model):
     def validation_step(self, batch, batch_idx):

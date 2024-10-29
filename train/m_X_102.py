@@ -1,16 +1,17 @@
 from ._base import *
-from data.indl_and_cifar100 import trainloader_combined, testloader_combined
+from data.data102_indl_and_cifar100 import trainloader_combined, testloader_combined
+from model.model_102 import ModifiedModel
 
 def main(model_name):
     # Initialize Wandb logger with a careful naming convention for the model
-    wandb_logger = WandbLogger(project="illusion_augmented_models", name=f"model_m_X_{model_name}", log_model=True)
+    wandb_logger = WandbLogger(project="illusion_augmented_models", save_dir="tmp", name=f"model_m_X_102_{model_name}", log_model=True)
     # Experiment name and setup
     exp_name = "illusion_augmented_image_classification_model"
 
     # Callbacks
     checkpoint_callback = ModelCheckpoint(
         monitor="val_acc",
-        dirpath=f"./models/m_X_{model_name}/",
+        dirpath=f"./tmp/models/m_X_102_{model_name}/",
         filename="{epoch:02d}-{val_acc:.2f}",
         save_top_k=1,
         mode="max",
@@ -26,7 +27,7 @@ def main(model_name):
     )
 
     # Path for latest checkpoint
-    checkpoint_dir = f"./models/m_X_{model_name}/"
+    checkpoint_dir = f"./tmp/models/m_X_102_{model_name}/"
     latest_checkpoint = None
 
     # Check if a checkpoint exists
@@ -39,7 +40,7 @@ def main(model_name):
             )
 
     # Training model instance
-    model = ModifiedModel(model_name, steps_per_epoch=len(trainloader_combined), num_classes=12, lr=1e-4)
+    model = ModifiedModel(model_name, steps_per_epoch=len(trainloader_combined), num_classes=102, lr=1e-4)
 
     # Trainer configuration
     trainer = Trainer(

@@ -1,7 +1,7 @@
 import torch
-from data_cifar100 import train_dataset, test_dataset
-from data_indl import combined_trainset, combined_testset
-from data_base import *
+from .cifar100 import train_dataset, test_dataset
+from .indl import combined_trainset, combined_testset
+from ._base import *
 from torch.utils.data import ConcatDataset, DataLoader, Dataset
 
 # Custom dataset wrapper to replace binary labels (0, 1) from any binary dataset
