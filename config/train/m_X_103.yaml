@@ -1,0 +1,8 @@
+defaults:
+  - _base
+
+data:
+  name: indl_and_cifar100
+
+model:
+  task: "m_X_103"

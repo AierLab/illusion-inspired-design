@@ -1,6 +1,6 @@
 import torch
 from .cifar100 import train_dataset, test_dataset
-from .indl import combined_trainset, combined_testset
+from .indl32 import combined_trainset, combined_testset
 from ._base import *
 from torch.utils.data import ConcatDataset, DataLoader, Dataset
 
@@ -42,7 +42,7 @@ combined_trainset_final = ConcatDataset([modified_combined_trainset, train_datas
 combined_testset_final = ConcatDataset([modified_combined_testset, test_dataset])
 
 # Create DataLoader for combined training dataset
-trainloader_combined = DataLoader(combined_trainset_final, batch_size=128, shuffle=True)
+trainloader_combined = DataLoader(combined_trainset_final, batch_size=32, shuffle=True, num_workers=num_workers, pin_memory=True)
 
 # Create DataLoader for combined testing dataset (with labels changed to 11 and 12)
-testloader_combined = DataLoader(combined_testset_final, batch_size=128, shuffle=False)
+testloader_combined = DataLoader(combined_testset_final, batch_size=32, shuffle=False, num_workers=num_workers, pin_memory=True)

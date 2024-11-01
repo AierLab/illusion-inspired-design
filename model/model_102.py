@@ -1,6 +1,6 @@
 from .model import *
 
-class ModifiedModel(Model):
+class Model(Model):
     def validation_step(self, batch, batch_idx):
         images, labels = batch
 
@@ -20,7 +20,7 @@ class ModifiedModel(Model):
             valid_labels = labels[valid_indices]
             logits_valid = self(valid_images)  # Forward pass for filtered images
 
-            loss_valid = F.cross_entropy(logits_valid, valid_labels)
+            loss_valid = self.criterion(logits_valid, valid_labels)
             preds_valid = torch.argmax(logits_valid, dim=1)
             acc_valid = (preds_valid == valid_labels).float().mean()
 
@@ -40,7 +40,7 @@ class ModifiedModel(Model):
             exc_labels = labels[exc_indices]
             logits_exc = self(exc_images)  # Forward pass for excluded images
 
-            loss_exc = F.cross_entropy(logits_exc, exc_labels)
+            loss_exc = self.criterion(logits_exc, exc_labels)
             preds_exc = torch.argmax(logits_exc, dim=1)
             acc_exc = (preds_exc == exc_labels).float().mean()
 

@@ -1,0 +1,27 @@
+hydra:
+  run:
+    dir: tmp/hydra
+  output_subdir: "%Y-%m-%d/%H-%M-%S"
+
+data:
+  name: none
+
+model:
+  task: none
+  name: resnet50 # 默认模型名称，可根据需求更改
+  lr: 1e-5
+  num_classes: 100
+
+trainer:
+  max_epochs: 50
+  accelerator: auto
+  exp_name: illusion_augmented_image_classification_model
+  logger_project: illusion_augmented_models
+  logger_save_dir: tmp
+  logger_name: model_${model.task}_${model.name}
+  save_top_k: 1
+  monitor_metric: val_acc
+  early_stop_metric: val_loss
+  early_stop_patience: 3
+  checkpoint_dir: ../tmp/models/${model.task}_${model.name}/
+  devices: 1

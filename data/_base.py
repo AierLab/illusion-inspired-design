@@ -6,6 +6,8 @@ from torch.utils.data import Dataset
 from PIL import Image
 from torchvision import transforms
 
+num_workers = os.cpu_count()
+
 
 class MyDataset(Dataset):
     def __init__(self, data_dir, transforms=None):
@@ -28,12 +30,6 @@ class MyDataset(Dataset):
     def get_img_info(self, data_dir):
         path_dir = os.path.join(data_dir, 'label.csv')
         return pd.read_csv(path_dir)
-
-transform = transforms.Compose([
-    transforms.Resize((32, 32)),  # Resize all images to 32x32
-    transforms.ToTensor(),   
-    transforms.Normalize((0.5,), (0.5,))  
-])
 
 # Custom Dataset to hold tensors
 class TensorDataset(Dataset):

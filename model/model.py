@@ -7,7 +7,7 @@ class Model(LightningModule):
         self.save_hyperparameters()
 
         # Load pre-trained ResNet50 model from timm with the correct number of classes
-        self.model = create_model(model_name, pretrained=False, num_classes=num_classes)
+        self.model = create_model(model_name, pretrained=True, num_classes=num_classes)
 
         # Loss function and learning rate
         self.criterion = nn.CrossEntropyLoss()
@@ -37,6 +37,6 @@ class Model(LightningModule):
         return loss
 
     def configure_optimizers(self):
-        optimizer = torch.optim.Adam(self.parameters(), lr=self.lr)
+        optimizer = torch.optim.AdamW(self.parameters(), lr=self.lr)
         scheduler = torch.optim.lr_scheduler.OneCycleLR(optimizer, max_lr=self.lr, steps_per_epoch=self.steps_per_epoch, epochs=self.trainer.max_epochs)
         return {"optimizer": optimizer, "lr_scheduler": scheduler}

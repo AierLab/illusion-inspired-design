@@ -35,7 +35,11 @@ Make necessary modifications to `pyproject.toml` for any specific `uv` configura
 
 To start training, run the following bash script:
 ```bash
-bash assets/script/train.sh
+bash train.sh
+
+or
+
+python train.py
 ```
 
 ## License
