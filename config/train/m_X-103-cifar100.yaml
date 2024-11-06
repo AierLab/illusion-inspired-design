@@ -3,6 +3,7 @@ defaults:
 
 data:
   name: indl_and_cifar100
+  num_classes: 103
 
 model:
   task: "m_X_103"

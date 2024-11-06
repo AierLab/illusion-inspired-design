@@ -1,0 +1,11 @@
+defaults:
+  - _base
+
+data:
+  name: indl_and_cifar100
+  num_classes: 100
+
+model:
+  task: "m_X_comp"
+  ckpt_path_A: none
+  ckpt_path_B: none

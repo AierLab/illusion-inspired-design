@@ -6,7 +6,8 @@ from torch.utils.data import Dataset
 from PIL import Image
 from torchvision import transforms
 
-num_workers = os.cpu_count()
+# num_workers = os.cpu_count()
+num_workers = 32
 
 
 class MyDataset(Dataset):

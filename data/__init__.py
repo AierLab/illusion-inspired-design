@@ -21,7 +21,10 @@ def get_dataloader(dataset_name: str):
     elif dataset_name == "imagenet1k":
         from .imagenet1k import trainloader_imagenet1k, testloader_imagenet1k
         return trainloader_imagenet1k, testloader_imagenet1k
-    elif dataset_name == "indl_and_imagenet":
+    elif dataset_name == "imagenet100":
+        from .imagenet100 import trainloader_imagenet1k, testloader_imagenet1k
+        return trainloader_imagenet1k, testloader_imagenet1k
+    elif dataset_name == "indl_and_imagenet1k":
         from .indl_and_imagenet1k import trainloader_combined, testloader_combined
         return trainloader_combined, testloader_combined
     else:

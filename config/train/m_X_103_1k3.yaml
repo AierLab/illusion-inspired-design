@@ -1,6 +1,0 @@
-defaults:
-  - m_X_103
-
-data:
-  name: indl_and_imagenet
-  num_classes: 1003

@@ -1,4 +1,7 @@
-from ._base import num_workers
+if __name__ == "__main__":
+    num_workers = 32
+else:
+    from ._base import num_workers
 from datasets import load_dataset
 import datasets
 from torch.utils.data import DataLoader
@@ -24,9 +27,24 @@ transform_test = transforms.Compose([
                          std=[x / 255.0 for x in [0.267, 0.256, 0.276]])
 ])
 
+num_class=100
+
 # Load datasets
-train_dataset = load_dataset('/workspace/Illusion_Res/datasets/imagenet-1k', split='train', trust_remote_code=True, cache_dir="tmp/cache")
-val_dataset = load_dataset('/workspace/Illusion_Res/datasets/imagenet-1k', split='validation', trust_remote_code=True, cache_dir="tmp/cache")
+dataset_path = f"/workspace/Illusion_Res/datasets/imagenet-1k-{num_class}"
+train_dataset = datasets.load_from_disk(f"{dataset_path}/train")
+val_dataset = datasets.load_from_disk(f"{dataset_path}/validation")
+
+# # Find the max label for the first 200 data points in the training dataset
+# max_label_train = max(val_dataset[:200]['label'])
+# print(f"Max label in the first 200 training data points: {max_label_train}")
+
+# Filter datasets to include only the first 100 classes
+train_dataset = train_dataset.filter(lambda x: x['label'] < num_class)
+val_dataset = val_dataset.filter(lambda x: x['label'] < num_class)
+
+# # Find the max label for the first 200 data points in the training dataset
+# max_label_train = max(val_dataset[:200]['label'])
+# print(f"Max label in the first 200 training data points: {max_label_train}")
 
 # Apply transformations manually
 class TransformedDataset(torch.utils.data.Dataset):
@@ -57,8 +75,8 @@ trainset_transformed = TransformedDataset(train_dataset, transform_train)
 valset_transformed = TransformedDataset(val_dataset, transform_test)
 
 # Create DataLoaders for transformed datasets
-trainloader_imagenet1k = DataLoader(trainset_transformed, batch_size=100, shuffle=True, num_workers=num_workers, pin_memory=True)
-testloader_imagenet1k = DataLoader(valset_transformed, batch_size=100, shuffle=False, num_workers=num_workers, pin_memory=True)
+trainloader_imagenet1k = DataLoader(trainset_transformed, batch_size=128, shuffle=True, num_workers=num_workers, pin_memory=True)
+testloader_imagenet1k = DataLoader(valset_transformed, batch_size=128, shuffle=False, num_workers=num_workers, pin_memory=True)
 
 # Output DataLoader summary
 print("\nImageNet-1k DataLoader Summary:")

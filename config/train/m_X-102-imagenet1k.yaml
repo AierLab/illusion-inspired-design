@@ -1,0 +1,9 @@
+defaults:
+  - _base
+
+data:
+  name: indl_and_imagenet1k
+  num_classes: 1002
+
+model:
+  task: "m_X_102"

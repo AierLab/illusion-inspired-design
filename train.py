@@ -49,7 +49,9 @@ def train(cfg: DictConfig):
         cfg.model.name,
         steps_per_epoch=len(train_dataloader),
         num_classes=cfg.model.num_classes,
-        lr=cfg.model.lr
+        lr=cfg.model.lr,
+        ckpt_path_A=cfg.model.ckpt_path_A,
+        ckpt_path_B=cfg.model.ckpt_path_B
     )
 
     # Trainer configuration
@@ -58,6 +60,7 @@ def train(cfg: DictConfig):
         logger=wandb_logger,
         callbacks=[checkpoint_callback, lr_monitor],
         accelerator=cfg.trainer.accelerator,
+        strategy="ddp",
         devices=cfg.trainer.devices
     )
 
@@ -80,7 +83,7 @@ def main():
 
 def parse_args():
     parser = argparse.ArgumentParser(description="Training script")
-    parser.add_argument('--config_name', type=str, default="m_B_100", help='Name of the configuration')
+    parser.add_argument('--config_name', type=str, help='Name of the configuration')
     return parser.parse_args()
 
 if __name__ == "__main__":
