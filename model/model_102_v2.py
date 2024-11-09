@@ -51,7 +51,7 @@ class Model(Model):
         weight_dim2 = alpha_dim2 / (2 * torch.exp(self.log_var_dim2)**2)
 
         # Combine the two losses with adjusted weighting factors
-        loss = weight_dim1 * loss_dim1 + weight_dim2 * loss_dim2 + (self.log_var_dim1 + self.log_var_dim2)
+        loss = (weight_dim1 * loss_dim1 + weight_dim2 * loss_dim2) / (self.log_var_dim1 + self.log_var_dim2)
 
         # Calculate accuracy only for first 100 classes
         if mask_dim1.any():

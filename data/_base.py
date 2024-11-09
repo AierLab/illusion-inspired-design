@@ -2,6 +2,7 @@
 
 import os
 import pandas as pd
+import torch
 from torch.utils.data import Dataset
 from PIL import Image
 from torchvision import transforms
@@ -17,8 +18,9 @@ class MyDataset(Dataset):
         self.transforms = transforms
 
     def __getitem__(self, item):
+        item = int(item)  # Ensure item is an integer
         path_img, label = self.data_info.iloc[item][1:3]
-        label = int(label)
+        label = torch.tensor(int(label))  # Convert label to a tensor
         path_img = os.path.join(self.data_dir, path_img)
         image = Image.open(path_img).convert('RGB')
         if self.transforms is not None:

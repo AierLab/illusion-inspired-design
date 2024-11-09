@@ -12,8 +12,11 @@ def get_dataloader(dataset_name: str):
     if dataset_name == "cifar100":
         from .cifar100 import trainloader_cifar100, testloader_cifar100
         return trainloader_cifar100, testloader_cifar100
-    elif dataset_name == "indl":
+    elif dataset_name == "indl32":
         from .indl32 import trainloader_indl, testloader_indl
+        return trainloader_indl, testloader_indl
+    elif dataset_name == "indl224":
+        from .indl224 import trainloader_indl, testloader_indl
         return trainloader_indl, testloader_indl
     elif dataset_name == "indl_and_cifar100":
         from .indl_and_cifar100 import trainloader_combined, testloader_combined
@@ -22,8 +25,11 @@ def get_dataloader(dataset_name: str):
         from .imagenet1k import trainloader_imagenet1k, testloader_imagenet1k
         return trainloader_imagenet1k, testloader_imagenet1k
     elif dataset_name == "imagenet100":
-        from .imagenet100 import trainloader_imagenet1k, testloader_imagenet1k
-        return trainloader_imagenet1k, testloader_imagenet1k
+        from .imagenet100 import trainloader_imagenet100, testloader_imagenet100
+        return trainloader_imagenet100, testloader_imagenet100
+    elif dataset_name == "indl_and_imagenet100":
+        from .indl_and_imagenet100 import trainloader_combined, testloader_combined
+        return trainloader_combined, testloader_combined
     elif dataset_name == "indl_and_imagenet1k":
         from .indl_and_imagenet1k import trainloader_combined, testloader_combined
         return trainloader_combined, testloader_combined

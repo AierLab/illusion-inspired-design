@@ -45,14 +45,22 @@ def train(cfg: DictConfig):
             )
 
     # Training model instance
-    model = Model(
-        cfg.model.name,
-        steps_per_epoch=len(train_dataloader),
-        num_classes=cfg.model.num_classes,
-        lr=cfg.model.lr,
-        ckpt_path_A=cfg.model.ckpt_path_A,
-        ckpt_path_B=cfg.model.ckpt_path_B
-    )
+    if cfg.model.task == "m_X_comp":
+        model = Model(
+            cfg.model.name,
+            steps_per_epoch=len(train_dataloader),
+            num_classes=cfg.model.num_classes,
+            lr=cfg.model.lr,
+            ckpt_path_A=cfg.model.ckpt_path_A,
+            ckpt_path_B=cfg.model.ckpt_path_B
+        )
+    else:
+        model = Model(
+            cfg.model.name,
+            steps_per_epoch=len(train_dataloader),
+            num_classes=cfg.model.num_classes,
+            lr=cfg.model.lr
+        )
 
     # Trainer configuration
     trainer = Trainer(

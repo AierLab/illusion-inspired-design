@@ -75,19 +75,19 @@ trainset_transformed = TransformedDataset(train_dataset, transform_train)
 valset_transformed = TransformedDataset(val_dataset, transform_test)
 
 # Create DataLoaders for transformed datasets
-trainloader_imagenet1k = DataLoader(trainset_transformed, batch_size=128, shuffle=True, num_workers=num_workers, pin_memory=True)
-testloader_imagenet1k = DataLoader(valset_transformed, batch_size=128, shuffle=False, num_workers=num_workers, pin_memory=True)
+trainloader_imagenet100 = DataLoader(trainset_transformed, batch_size=10, shuffle=True, num_workers=num_workers, pin_memory=True)
+testloader_imagenet100 = DataLoader(valset_transformed, batch_size=10, shuffle=False, num_workers=num_workers, pin_memory=True)
 
 # Output DataLoader summary
 print("\nImageNet-1k DataLoader Summary:")
 print(f"Total training samples: {len(trainset_transformed)}")
 print(f"Total validation samples: {len(valset_transformed)}")
-print(f"Training batches: {len(trainloader_imagenet1k)}")
-print(f"Validation batches: {len(testloader_imagenet1k)}")
+print(f"Training batches: {len(trainloader_imagenet100)}")
+print(f"Validation batches: {len(testloader_imagenet100)}")
 
 # Display the first batch to verify data shapes
-first_train_batch = next(iter(trainloader_imagenet1k))
-first_val_batch = next(iter(testloader_imagenet1k))
+first_train_batch = next(iter(trainloader_imagenet100))
+first_val_batch = next(iter(testloader_imagenet100))
 
 train_images, train_labels = first_train_batch
 val_images, val_labels = first_val_batch

@@ -3,12 +3,10 @@ defaults:
 
 data:
   name: imagenet100
-  num_classes: 100
 
 model:
   task: "m_B"
   exp_name: illusion_augmented_image_classification_model_imagenet1k_100
 
 trainer:
-  max_epochs: 5
-  devices: 2
+  max_epochs: 10

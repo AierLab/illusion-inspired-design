@@ -2,10 +2,13 @@ defaults:
   - _base
 
 data:
-  name: indl_and_imagenet100
-  num_classes: 100
+  name: imagenet100
 
 model:
   task: "m_X_comp"
-  ckpt_path_A: none
+  num_classes: 100
+  ckpt_path_A: /workspace/Illusion_Res/tmp/models/m_A_resnet50_indl224/m_B_epoch=34-val_acc=0.91.ckpt
   ckpt_path_B: none
+
+trainer:
+  max_epochs: 10

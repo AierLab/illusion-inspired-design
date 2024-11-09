@@ -1,16 +1,17 @@
 from ._base import *
-from .model import Model as Model_base
+from .model import Model
 
-class Model(LightningModule):
+class ModelComp(LightningModule):
     def __init__(self, model_name, steps_per_epoch, num_classes, lr, ckpt_path_A, ckpt_path_B):
-        super(Model, self).__init__()
+        super(ModelComp, self).__init__()
         self.save_hyperparameters()
 
         # Load two ResNet50 models from checkpoints
-        self.model_A = Model_base.load_from_checkpoint(ckpt_path_A, map_location="cpu").model
+        self.model_A = Model.load_from_checkpoint(ckpt_path_A, map_location="cpu").model
         # self.model_A = create_model("resnet50", pretrained=False, num_classes=2)
         # self.model_A.load_state_dict(torch.load(ckpt_path_A)["state_dict"], map_location="cpu")
-        self.model_B = Model_base.load_from_checkpoint(ckpt_path_B, map_location="cpu").model
+        # self.model_B = Model_base.load_from_checkpoint(ckpt_path_B, map_location="cpu").model
+        self.model_B = create_model(model_name, pretrained=True, num_classes=num_classes)
         # self.model_B = create_model("resnet50", pretrained=False, num_classes=2)
         # self.model_B.load_state_dict(torch.load(ckpt_path_B)["state_dict"], map_location="cpu")
 
@@ -20,9 +21,9 @@ class Model(LightningModule):
         for param in self.model_A.parameters():
             param.requires_grad = False
         
-        self.model_B.eval()
-        for param in self.model_B.parameters():
-            param.requires_grad = False
+        # self.model_B.eval() # TODO in our case, model B is trainable
+        # for param in self.model_B.parameters():
+        #     param.requires_grad = False
 
         # Extract specific layers from both models
         # Model A layers
@@ -56,9 +57,9 @@ class Model(LightningModule):
         self.mlp3 = self.define_mlp(out_channels_layer3)
 
         # Define MultiheadAttention blocks for each layer
-        self.attention1 = nn.MultiheadAttention(embed_dim=out_channels_layer1, num_heads=8, batch_first=True)
-        self.attention2 = nn.MultiheadAttention(embed_dim=out_channels_layer2, num_heads=8, batch_first=True)
-        self.attention3 = nn.MultiheadAttention(embed_dim=out_channels_layer3, num_heads=8, batch_first=True)
+        self.attention1 = nn.MultiheadAttention(embed_dim=out_channels_layer1, num_heads=2, batch_first=True)
+        self.attention2 = nn.MultiheadAttention(embed_dim=out_channels_layer2, num_heads=2, batch_first=True)
+        self.attention3 = nn.MultiheadAttention(embed_dim=out_channels_layer3, num_heads=2, batch_first=True)
 
         # Pooling and classifier
         self.global_pool_B = self.model_B.global_pool

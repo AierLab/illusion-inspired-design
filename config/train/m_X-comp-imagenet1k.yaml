@@ -2,10 +2,10 @@ defaults:
   - _base
 
 data:
-  name: indl_and_imagenet1k
-  num_classes: 1000
+  name: imagenet1k
 
 model:
   task: "m_X_comp"
+  num_classes: 1000
   ckpt_path_A: none
   ckpt_path_B: none

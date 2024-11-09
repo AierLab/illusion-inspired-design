@@ -10,5 +10,5 @@ model:
   num_classes: 1000
 
 trainer:
-  max_epochs: 5
+  max_epochs: 10
   devices: 2

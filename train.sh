@@ -8,6 +8,7 @@ source .venv/bin/activate
 # config_name=m_X_103_1k3
 # config_name=m_X_102_v2
 
-config_name="m_B-none-imagenet100"
+# config_name=m_B-none-imagenet100
+config_name=m_X-103-imagenet100
 
 python train.py --config_name $config_name
