@@ -2,7 +2,7 @@ defaults:
   - _base
 
 data:
-  name: indl_and_cifar100
+  name: indl_and_imagenet1k
 
 model:
   task: "m_X_102_v2"

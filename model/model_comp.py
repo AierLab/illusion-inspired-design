@@ -1,5 +1,6 @@
 from ._base import *
 from .model import Model
+from sklearn.metrics import accuracy_score
 
 class ModelComp(LightningModule):
     def __init__(self, model_name, steps_per_epoch, num_classes, lr, ckpt_path_A, ckpt_path_B):
@@ -143,9 +144,8 @@ class ModelComp(LightningModule):
         x_B_flat = x_B.view(batch_size, channels, -1).permute(0, 2, 1)  # [batch_size, H*W, channels]
 
         # Apply attention
-        # attn_output, _ = attention_layer(x_B_flat, x_A_flat, x_A_flat) # Q, K, V # TODO make reverse the knowledge transfer direction
-        attn_output, _ = attention_layer(x_A_flat, x_B_flat, x_B_flat) # Q, K, V
-
+        attn_output, _ = attention_layer(x_B_flat, x_A_flat, x_A_flat) # Q, K, V
+        
         # Reshape the output back to [batch_size, channels, H, W]
         attn_output = attn_output.permute(0, 2, 1).view(batch_size, channels, height, width)
 
@@ -158,18 +158,40 @@ class ModelComp(LightningModule):
         images, labels = batch
         outputs = self(images)
         loss = self.criterion(outputs, labels)
-        acc = accuracy_score(labels.cpu(), outputs.argmax(dim=1).cpu())
+
+        # Calculate Top-1 accuracy
+        top1_preds = outputs.argmax(dim=1)
+        top1_acc = accuracy_score(labels.cpu(), top1_preds.cpu())
+
+        # Calculate Top-5 accuracy
+        top5_preds = torch.topk(outputs, k=5, dim=1).indices
+        top5_acc = torch.tensor([(label in top5) for label, top5 in zip(labels, top5_preds)]).float().mean().item()
+
+        # Log metrics
         self.log('train_loss', loss, prog_bar=True)
-        self.log('train_acc', acc, prog_bar=True)
+        self.log('train_top1_acc', top1_acc, prog_bar=True)
+        self.log('train_top5_acc', top5_acc, prog_bar=True)
+
         return loss
 
     def validation_step(self, batch, batch_idx):
         images, labels = batch
         outputs = self(images)
         loss = self.criterion(outputs, labels)
-        acc = accuracy_score(labels.cpu(), outputs.argmax(dim=1).cpu())
+
+        # Calculate Top-1 accuracy
+        top1_preds = outputs.argmax(dim=1)
+        top1_acc = accuracy_score(labels.cpu(), top1_preds.cpu())
+
+        # Calculate Top-5 accuracy
+        top5_preds = torch.topk(outputs, k=5, dim=1).indices
+        top5_acc = torch.tensor([(label in top5) for label, top5 in zip(labels, top5_preds)]).float().mean().item()
+
+        # Log metrics
         self.log('val_loss', loss, prog_bar=True)
-        self.log('val_acc', acc, prog_bar=True)
+        self.log('val_top1_acc', top1_acc, prog_bar=True)
+        self.log('val_top5_acc', top5_acc, prog_bar=True)
+
         return loss
 
     def configure_optimizers(self):

@@ -28,7 +28,7 @@ def train(cfg: DictConfig):
     checkpoint_callback = ModelCheckpoint(
         monitor=cfg.trainer.monitor_metric,
         dirpath=cfg.trainer.checkpoint_dir,
-        filename="m_B_{epoch:02d}-{val_acc:.2f}",
+        filename=cfg.model.task + "_{epoch:02d}-{val_acc:.3f}",
         save_top_k=cfg.trainer.save_top_k,
         mode="max",
     )
@@ -45,7 +45,7 @@ def train(cfg: DictConfig):
             )
 
     # Training model instance
-    if cfg.model.task == "m_X_comp":
+    if cfg.model.task == "m_X_comp" or cfg.model.task == "m_X_comp_reverse":
         model = Model(
             cfg.model.name,
             steps_per_epoch=len(train_dataloader),

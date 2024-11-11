@@ -8,5 +8,3 @@ model:
   task: "m_X_103"
   num_classes: 103
 
-trainer:
-  max_epochs: 10

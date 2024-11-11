@@ -1,5 +1,6 @@
 from .model import *
 import numpy as np
+from sklearn.metrics import accuracy_score
 
 class Model(Model):
     def __init__(self, model_name, steps_per_epoch, num_classes, lr):
@@ -80,12 +81,21 @@ class Model(Model):
         # Calculate accuracy only for the first 100 classes
         labels_acc = labels[labels < 100]
         outputs_acc = outputs[labels < 100][:, :100]  # Select only the first 100 classes
-        preds = outputs_acc.argmax(dim=1)
-        acc = accuracy_score(labels_acc.cpu(), preds.cpu())
-        self.log('train_loss', loss, prog_bar=True)
-        self.log('train_acc', acc, prog_bar=True)
-        return loss
 
+        # Top-1 accuracy
+        top1_preds = outputs_acc.argmax(dim=1)
+        top1_acc = accuracy_score(labels_acc.cpu(), top1_preds.cpu())
+
+        # Top-5 accuracy
+        top5_preds = torch.topk(outputs_acc, k=5, dim=1).indices
+        top5_acc = torch.tensor([(label in top5) for label, top5 in zip(labels_acc, top5_preds)]).float().mean().item()
+
+        # Log metrics
+        self.log('train_loss', loss, prog_bar=True)
+        self.log('train_top1_acc', top1_acc, prog_bar=True)
+        self.log('train_top5_acc', top5_acc, prog_bar=True)
+
+        return loss
 
     def validation_step(self, batch, batch_idx):
         images, labels = batch
@@ -93,12 +103,17 @@ class Model(Model):
         # Forward pass for all images
         outputs = self(images)
 
-        # Compute loss and accuracy for all labels (val_all)
+        # Compute loss for all labels (val_all)
         loss_all = self.criterion(outputs, labels)
-        preds_all = torch.argmax(outputs, dim=1)
-        acc_all = (preds_all == labels).float().mean()
 
-        # Filter labels within the range of 0 to 9 (val_B)
+        # Top-1 and Top-5 accuracies for all labels
+        preds_all_top1 = torch.argmax(outputs, dim=1)
+        acc_all_top1 = (preds_all_top1 == labels).float().mean()
+
+        top5_preds_all = torch.topk(outputs, k=5, dim=1).indices
+        acc_all_top5 = torch.tensor([(label in top5) for label, top5 in zip(labels, top5_preds_all)]).float().mean().item()
+
+        # Filter labels within the range of 0 to 99 (val_B)
         valid_indices = (labels >= 0) & (labels <= 99)
 
         if valid_indices.any():
@@ -107,50 +122,61 @@ class Model(Model):
             logits_valid = self(valid_images)[:, :100]  # Forward pass for filtered images
 
             loss_valid = self.criterion(logits_valid, valid_labels)
-            preds_valid = torch.argmax(logits_valid, dim=1)
-            acc_valid = (preds_valid == valid_labels).float().mean()
 
-            # Log validation metrics for filtered labels 0-9
+            # Top-1 and Top-5 accuracies for filtered labels 0-99
+            preds_valid_top1 = torch.argmax(logits_valid, dim=1)
+            acc_valid_top1 = (preds_valid_top1 == valid_labels).float().mean()
+
+            top5_preds_valid = torch.topk(logits_valid, k=5, dim=1).indices
+            acc_valid_top5 = torch.tensor([(label in top5) for label, top5 in zip(valid_labels, top5_preds_valid)]).float().mean().item()
+
+            # Log validation metrics for filtered labels 0-99
             self.log('val_loss', loss_valid, prog_bar=True)
-            self.log('val_acc', acc_valid, prog_bar=True)
-
+            self.log('val_top1_acc', acc_valid_top1, prog_bar=True)
+            self.log('val_top5_acc', acc_valid_top5, prog_bar=True)
         else:
             loss_valid = None
-            acc_valid = None
+            acc_valid_top1 = None
+            acc_valid_top5 = None
 
-        # Filter labels outside the range of 0 to 9 (val_exc for exclusive labels 10-11)
+        # Filter labels outside the range of 0 to 99 (val_exc for exclusive labels 100-101)
         exc_indices = (labels >= 100) & (labels <= 101)
 
         if exc_indices.any():
             exc_images = images[exc_indices]
-            exc_labels = labels[exc_indices] - 100
+            exc_labels = labels[exc_indices] - 100  # Adjust labels to 0 and 1 for the last two classes
             logits_exc = self(exc_images)[:, -2:]  # Forward pass for excluded images
 
             loss_exc = self.criterion(logits_exc, exc_labels)
-            preds_exc = torch.argmax(logits_exc, dim=1)
-            acc_exc = (preds_exc == exc_labels).float().mean()
 
-            # Log validation metrics for labels 10-11
+            # Top-1 accuracy for exclusive labels 100-101
+            preds_exc_top1 = torch.argmax(logits_exc, dim=1)
+            acc_exc_top1 = (preds_exc_top1 == exc_labels).float().mean()
+
+            # Log validation metrics for labels 100-101
             self.log('val_exc_loss', loss_exc, prog_bar=True)
-            self.log('val_exc_acc', acc_exc, prog_bar=True)
-
+            self.log('val_exc_top1_acc', acc_exc_top1, prog_bar=True)
         else:
             loss_exc = None
-            acc_exc = None
+            acc_exc_top1 = None
 
-        # Log overall validation loss and accuracy (for all labels)
+        # Log overall validation loss and Top-1 and Top-5 accuracies (for all labels)
         self.log('val_all_loss', loss_all, prog_bar=True)
-        self.log('val_all_acc', acc_all, prog_bar=True)
+        self.log('val_all_top1_acc', acc_all_top1, prog_bar=True)
+        self.log('val_all_top5_acc', acc_all_top5, prog_bar=True)
 
         # Return all the metrics
         return {
             'val_loss': loss_valid,
-            'val_acc': acc_valid,
+            'val_top1_acc': acc_valid_top1,
+            'val_top5_acc': acc_valid_top5,
             'val_exc_loss': loss_exc,
-            'val_exc_acc': acc_exc,
+            'val_exc_top1_acc': acc_exc_top1,
             'val_all_loss': loss_all,
-            'val_all_acc': acc_all,
+            'val_all_top1_acc': acc_all_top1,
+            'val_all_top5_acc': acc_all_top5,
         }
+
     
     def configure_optimizers(self):
         optimizer = torch.optim.AdamW(self.parameters(), lr=self.lr)

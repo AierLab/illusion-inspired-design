@@ -1,5 +1,6 @@
 from .model_102 import *
 import numpy as np
+from sklearn.metrics import accuracy_score
 
 class Model(Model):
     def __init__(self, model_name, steps_per_epoch, num_classes, lr):
@@ -53,17 +54,25 @@ class Model(Model):
         # Combine the two losses with adjusted weighting factors
         loss = (weight_dim1 * loss_dim1 + weight_dim2 * loss_dim2) / (self.log_var_dim1 + self.log_var_dim2)
 
-        # Calculate accuracy only for first 100 classes
+        # Calculate Top-1 and Top-5 accuracy only for the first 100 classes
         if mask_dim1.any():
             labels_acc = labels[mask_dim1]
             outputs_acc = outputs[mask_dim1]
-            preds = outputs_acc.argmax(dim=1)
-            acc = accuracy_score(labels_acc.cpu(), preds.cpu())
+
+            # Top-1 accuracy
+            top1_preds = outputs_acc.argmax(dim=1)
+            top1_acc = accuracy_score(labels_acc.cpu(), top1_preds.cpu())
+
+            # Top-5 accuracy
+            top5_preds = torch.topk(outputs_acc, k=5, dim=1).indices
+            top5_acc = torch.tensor([(label in top5) for label, top5 in zip(labels_acc, top5_preds)]).float().mean().item()
         else:
-            acc = 0
+            top1_acc = 0
+            top5_acc = 0
 
         # Log metrics
         self.log('train_loss', loss, prog_bar=True)
-        self.log('train_acc', acc, prog_bar=True)
+        self.log('train_top1_acc', top1_acc, prog_bar=True)
+        self.log('train_top5_acc', top5_acc, prog_bar=True)
 
         return loss

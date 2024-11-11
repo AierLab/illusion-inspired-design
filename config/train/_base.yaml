@@ -18,7 +18,7 @@ model:
   ckpt_path_B: none
 
 trainer:
-  max_epochs: 10
+  max_epochs: 50
   accelerator: gpu
   exp_name: illusion_augmented_image_classification_model
   logger_project: illusion_augmented_models

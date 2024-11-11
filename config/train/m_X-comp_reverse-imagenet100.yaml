@@ -2,10 +2,12 @@ defaults:
   - _base
 
 data:
-  name: imagenet1k
+  name: imagenet100
 
 model:
-  task: "m_X_comp"
-  num_classes: 1000
+  task: "m_X_comp_reverse"
+  num_classes: 100
   ckpt_path_A: none
   ckpt_path_B: none
+
+
