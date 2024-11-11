@@ -7,5 +7,5 @@ data:
 model:
   task: "m_X_comp"
   num_classes: 100
-  ckpt_path_A: /workspace/Illusion_Res/tmp/models/m_A_resnet50_indl32/m_B_epoch=46-val_acc=0.76.ckpt
+  ckpt_path_A: /root/workspace/Illusion_Res/tmp/models/m_A_resnet50_indl32/m_A_epoch=16-val_top1_acc=0.828.ckpt
   ckpt_path_B: none

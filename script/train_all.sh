@@ -8,8 +8,8 @@ log_dir="log/$timestamp"
 mkdir -p $log_dir
 
 config_names=(
-    "m_A-none-indl32"
-    "m_A-none-indl224"
+    # "m_A-none-indl32"
+    # "m_A-none-indl224"
 
     "m_B-none-cifar100"
     # "m_B-none-imagenet100"
