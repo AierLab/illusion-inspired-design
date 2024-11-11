@@ -57,8 +57,8 @@ trainset_transformed = TransformedDataset(train_dataset, transform_train)
 valset_transformed = TransformedDataset(val_dataset, transform_test)
 
 # Create DataLoaders for transformed datasets
-trainloader_imagenet1k = DataLoader(trainset_transformed, batch_size=100, shuffle=True, num_workers=num_workers, pin_memory=True)
-testloader_imagenet1k = DataLoader(valset_transformed, batch_size=100, shuffle=False, num_workers=num_workers, pin_memory=True)
+trainloader_imagenet1k = DataLoader(trainset_transformed, batch_size=200, shuffle=True, num_workers=num_workers, pin_memory=True)
+testloader_imagenet1k = DataLoader(valset_transformed, batch_size=200, shuffle=False, num_workers=num_workers, pin_memory=True)
 
 # Output DataLoader summary
 print("\nImageNet-1k DataLoader Summary:")

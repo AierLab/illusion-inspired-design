@@ -35,7 +35,11 @@ Make necessary modifications to `pyproject.toml` for any specific `uv` configura
 
 To start training, run the following bash script:
 ```bash
-bash train.sh
+bash  train.sh
+
+or
+
+bash script/train_all.sh
 
 or
 

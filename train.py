@@ -6,10 +6,12 @@ from pytorch_lightning.callbacks import ModelCheckpoint, LearningRateMonitor, Ea
 from hydra import initialize, compose
 from pytorch_lightning import seed_everything
 from pytorch_lightning.loggers import WandbLogger
+import wandb
 import os
 from pytorch_lightning import Trainer
 import argparse
 
+wandb.login(key="ef983325a8df31bd8b4f48223851b7e920c3f8ae")
 
 @hydra.main(version_base=None, config_path="config/train", config_name="default")
 def train(cfg: DictConfig):    

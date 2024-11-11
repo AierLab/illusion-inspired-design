@@ -1,12 +1,11 @@
 #!/bin/bash
 #SBATCH --time=72:00:00
-#SBATCH --nodes=2
+#SBATCH --nodes=1
 #SBATCH --exclusive
 #SBATCH -p long
-#SBATCH -q gpu-12
 #SBATCH --gres=gpu:4
 #SBATCH --mem=230G
-#SBATCH --ntasks-per-node=4
+#SBATCH --ntasks-per-node=1
 
 source .venv/bin/activate
 
@@ -25,23 +24,23 @@ config_names=(
     "m_B-none-imagenet100"
     # "m_B-none-imagenet1k"
 
-    "m_X-102-cifar100"
+    # "m_X-102-cifar100"
     "m_X-102-imagenet100"
     # "m_X-102-imagenet1k"
 
-    "m_X-102_v2-cifar100"
+    # "m_X-102_v2-cifar100"
     "m_X-102_v2-imagenet100"
     # "m_X-102_v2-imagenet1k"
 
-    "m_X-comp-cifar100"
+    # "m_X-comp-cifar100"
     "m_X-comp-imagenet100"
     # "m_X-comp-imagenet1k"
 
-    "m_X-comp_reverse-cifar100"
+    # "m_X-comp_reverse-cifar100"
     "m_X-comp_reverse-imagenet100"
     # "m_X-comp-imagenet1k"
 
-    "m_X-103-cifar100"
+    # "m_X-103-cifar100"
     "m_X-103-imagenet100"
     # "m_X-103-imagenet1k"
 )
