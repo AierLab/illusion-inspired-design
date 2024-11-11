@@ -35,8 +35,8 @@ class Model(Model):
         outputs = self(images)
 
         # Create masks for each dimension based on label conditions
-        mask_dim1 = labels < 100          # Mask for CIFAR-100 classes (Dimension 1)
-        mask_dim2 = labels >= 100         # Mask for extra classes with illusion states (Dimension 2)
+        mask_dim1 = labels < 1000          # Mask for CIFAR-100 classes (Dimension 1)
+        mask_dim2 = labels >= 1000         # Mask for extra classes with illusion states (Dimension 2)
 
         # Compute loss for Dimension 1, applying mask
         loss_dim1 = self.criterion(outputs[mask_dim1], labels[mask_dim1]) if mask_dim1.any() else 0

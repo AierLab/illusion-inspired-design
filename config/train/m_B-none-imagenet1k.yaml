@@ -9,3 +9,7 @@ model:
   exp_name: illusion_augmented_image_classification_model_imagenet1k
   num_classes: 1000
 
+trainer:
+  max_epochs: 10
+  patience: 5
+

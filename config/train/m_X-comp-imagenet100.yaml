@@ -7,6 +7,9 @@ data:
 model:
   task: "m_X_comp"
   num_classes: 100
-  ckpt_path_A: none
+  ckpt_path_A: /workspace/Illusion_Res/checkpoints/ImageNet100/6-comp_model/m_A_epoch=34-val_acc=0.91.ckpt
   ckpt_path_B: none
 
+trainer:
+  max_epochs: 10
+  patience: 5

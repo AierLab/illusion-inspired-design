@@ -2,7 +2,7 @@ import model as m
 import data
 import hydra
 from omegaconf import DictConfig, OmegaConf
-from pytorch_lightning.callbacks import ModelCheckpoint, LearningRateMonitor
+from pytorch_lightning.callbacks import ModelCheckpoint, LearningRateMonitor, EarlyStopping
 from hydra import initialize, compose
 from pytorch_lightning import seed_everything
 from pytorch_lightning.loggers import WandbLogger
@@ -28,11 +28,18 @@ def train(cfg: DictConfig):
     checkpoint_callback = ModelCheckpoint(
         monitor=cfg.trainer.monitor_metric,
         dirpath=cfg.trainer.checkpoint_dir,
-        filename=cfg.model.task + "_{epoch:02d}-{val_acc:.3f}",
+        filename=cfg.model.task + "_{epoch:02d}-{val_top1_acc:.3f}",
         save_top_k=cfg.trainer.save_top_k,
         mode="max",
     )
     lr_monitor = LearningRateMonitor(logging_interval="step")
+
+    # Early stopping callback
+    early_stopping = EarlyStopping(
+        monitor="val_top1_acc",  # Metric to monitor
+        patience=cfg.trainer.patience,  # Number of epochs with no improvement
+        mode="max"  # "min" or "max"
+    )
 
     # Path for latest checkpoint
     latest_checkpoint = None
@@ -43,9 +50,14 @@ def train(cfg: DictConfig):
                 [os.path.join(cfg.trainer.checkpoint_dir, ckpt) for ckpt in checkpoints],
                 key=os.path.getctime
             )
+    
 
     # Training model instance
-    if cfg.model.task == "m_X_comp" or cfg.model.task == "m_X_comp_reverse":
+    if cfg.trainer.use_pretrained and latest_checkpoint:
+        model = Model.load_from_checkpoint(
+            latest_checkpoint
+            )
+    elif cfg.model.task == "m_X_comp" or cfg.model.task == "m_X_comp_reverse":
         model = Model(
             cfg.model.name,
             steps_per_epoch=len(train_dataloader),
@@ -66,7 +78,7 @@ def train(cfg: DictConfig):
     trainer = Trainer(
         max_epochs=cfg.trainer.max_epochs,
         logger=wandb_logger,
-        callbacks=[checkpoint_callback, lr_monitor],
+        callbacks=[checkpoint_callback, lr_monitor, early_stopping],
         accelerator=cfg.trainer.accelerator,
         strategy="ddp",
         devices=cfg.trainer.devices

@@ -19,12 +19,14 @@ model:
 
 trainer:
   max_epochs: 50
+  patience: 10
   accelerator: gpu
   exp_name: illusion_augmented_image_classification_model
   logger_project: illusion_augmented_models
   logger_save_dir: ./tmp/models
   logger_name: ${model.task}_${model.name}_${data.name}
   save_top_k: 1
-  monitor_metric: val_acc
-  checkpoint_dir: ../tmp/models/${model.task}_${model.name}_${data.name}/
+  monitor_metric: val_top1_acc
+  checkpoint_dir: tmp/models/${model.task}_${model.name}_${data.name}/
   devices: 2
+  use_pretrain: True

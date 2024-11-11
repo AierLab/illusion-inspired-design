@@ -195,11 +195,12 @@ class ModelComp(LightningModule):
         return loss
 
     def configure_optimizers(self):
-        optimizer = torch.optim.Adam(self.parameters(), lr=self.lr)
-        scheduler = torch.optim.lr_scheduler.OneCycleLR(
+        optimizer = torch.optim.AdamW(self.parameters(), lr=self.lr)
+        scheduler = torch.optim.lr_scheduler.CyclicLR(
             optimizer,
-            max_lr=self.lr,
-            steps_per_epoch=self.steps_per_epoch,
-            epochs=self.trainer.max_epochs
+            base_lr=self.lr / 10,  # Set the minimum learning rate (can be adjusted)
+            max_lr=self.lr,        # Set the maximum learning rate
+            step_size_up=self.steps_per_epoch // 2,  # Half of steps per epoch for increasing phase
+            mode='exp_range'      # Choose the mode; 'triangular', 'triangular2', or 'exp_range'
         )
         return {"optimizer": optimizer, "lr_scheduler": scheduler}

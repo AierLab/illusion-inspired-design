@@ -6,4 +6,8 @@ data:
 
 model:
   task: "m_X_102_v2"
-  num_classes: 102
+  num_classes: 1002
+
+trainer:
+  max_epochs: 10
+  patience: 5

@@ -9,3 +9,7 @@ model:
   num_classes: 1000
   ckpt_path_A: none
   ckpt_path_B: none
+
+trainer:
+  max_epochs: 10
+  patience: 5

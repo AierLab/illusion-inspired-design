@@ -7,6 +7,6 @@ data:
 model:
   task: "m_X_comp_reverse"
   num_classes: 100
-  ckpt_path_A: none
+  ckpt_path_A: /workspace/Illusion_Res/checkpoints/Cifar100/6-comp_model/m_A_epoch=21-val_acc=0.86.ckpt
   ckpt_path_B: none
 
