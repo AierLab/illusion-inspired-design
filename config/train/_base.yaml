@@ -29,4 +29,4 @@ trainer:
   monitor_metric: val_top1_acc
   checkpoint_dir: tmp/models/${model.task}_${model.name}_${data.name}/
   devices: 2
-  use_pretrain: True
+  use_pretrained: True
