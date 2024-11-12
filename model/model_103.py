@@ -16,9 +16,6 @@ class Model(Model):
         self.lr = lr
         self.steps_per_epoch = steps_per_epoch
         
-        self.log_var_dim1 = nn.Parameter(torch.tensor(0.))
-        self.log_var_dim2 = nn.Parameter(torch.tensor(0.))
-        
         self.num_classes = num_classes
         
         
@@ -52,13 +49,13 @@ class Model(Model):
 
         # For Dimension 1, replace labels >= 101 with 100
         # labels_dim1[labels >= 100] = 100
-        labels_dim1[labels >= 100] = 100
+        labels_dim1[labels >= self.num_classes - 3] = self.num_classes - 3
 
         # For Dimension 2, replace labels < 100 with 100
         # labels_dim2[labels < 100] = 101 # TODO 100 or 101 need experiments
-        labels_dim2[labels < 100] = 100 # TODO 100 or 101 need experiments, -1 or -2
+        labels_dim2[labels < self.num_classes - 3] = self.num_classes - 3 # TODO 100 or 101 need experiments, -1 or -2
         # labels_dim2 = labels_dim2 - 100
-        labels_dim2 = labels_dim2 - 100
+        labels_dim2 = labels_dim2 - (self.num_classes - 3)
         
         # print("Label min/max:", labels.min().item(), labels.max().item())
         # print("Label_dim1 min/max:", labels_dim1.min().item(), labels_dim1.max().item())
@@ -67,20 +64,13 @@ class Model(Model):
         # Apply cross-entropy loss for Dimension 1 and Dimension 2 directly
         loss_dim1 = self.criterion(outputs_dim1, labels_dim1)
         loss_dim2 = self.criterion(outputs_dim2, labels_dim2)
-        
-        alpha_dim1 = 1/len(outputs_dim1)
-        alpha_dim2 = 1/len(outputs_dim2)
-
-        # Define weighting factors considering log-variance and data length
-        weight_dim1 = alpha_dim1 / (2 * torch.exp(self.log_var_dim1)**2)
-        weight_dim2 = alpha_dim2 / (2 * torch.exp(self.log_var_dim2)**2)
 
         # Combine the two losses with adjusted weighting factors
-        loss = (weight_dim1 * loss_dim1 + weight_dim2 * loss_dim2) / (self.log_var_dim1 + self.log_var_dim2)
+        loss = loss_dim1 + loss_dim2
 
         # Calculate accuracy only for the first 100 classes
-        labels_acc = labels[labels < 100]
-        outputs_acc = outputs[labels < 100][:, :100]  # Select only the first 100 classes
+        labels_acc = labels[labels < self.num_classes - 3]
+        outputs_acc = outputs[labels < self.num_classes - 3][:, :self.num_classes - 3]  # Select only the first 100 classes
 
         # Top-1 accuracy
         top1_preds = outputs_acc.argmax(dim=1)
@@ -114,12 +104,12 @@ class Model(Model):
         acc_all_top5 = torch.tensor([(label in top5) for label, top5 in zip(labels, top5_preds_all)]).float().mean().item()
 
         # Filter labels within the range of 0 to 99 (val_B)
-        valid_indices = (labels >= 0) & (labels <= 99)
+        valid_indices = (labels >= 0) & (labels < self.num_classes - 3)
 
         if valid_indices.any():
             valid_images = images[valid_indices]
             valid_labels = labels[valid_indices]
-            logits_valid = self(valid_images)[:, :100]  # Forward pass for filtered images
+            logits_valid = self(valid_images)[:, :self.num_classes - 3]  # Forward pass for filtered images
 
             loss_valid = self.criterion(logits_valid, valid_labels)
 
@@ -140,11 +130,11 @@ class Model(Model):
             acc_valid_top5 = None
 
         # Filter labels outside the range of 0 to 99 (val_exc for exclusive labels 100-101)
-        exc_indices = (labels >= 100) & (labels <= 101)
+        exc_indices = (labels >= self.num_classes - 3) & (labels < self.num_classes - 1)
 
         if exc_indices.any():
             exc_images = images[exc_indices]
-            exc_labels = labels[exc_indices] - 100  # Adjust labels to 0 and 1 for the last two classes
+            exc_labels = labels[exc_indices] - (self.num_classes - 3)  # Adjust labels to 0 and 1 for the last two classes
             logits_exc = self(exc_images)[:, -2:]  # Forward pass for excluded images
 
             loss_exc = self.criterion(logits_exc, exc_labels)

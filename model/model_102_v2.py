@@ -16,8 +16,7 @@ class Model(Model):
         self.lr = lr
         self.steps_per_epoch = steps_per_epoch 
         
-        self.log_var_dim1 = nn.Parameter(torch.tensor(0.0))
-        self.log_var_dim2 = nn.Parameter(torch.tensor(0.0))
+        self.num_classes = num_classes
     
     def training_step(self, batch, batch_idx):
         '''
@@ -35,8 +34,8 @@ class Model(Model):
         outputs = self(images)
 
         # Create masks for each dimension based on label conditions
-        mask_dim1 = labels < 1000          # Mask for CIFAR-100 classes (Dimension 1)
-        mask_dim2 = labels >= 1000         # Mask for extra classes with illusion states (Dimension 2)
+        mask_dim1 = labels < self.num_classes - 2          # Mask for CIFAR-100 classes (Dimension 1)
+        mask_dim2 = labels >= self.num_classes - 2         # Mask for extra classes with illusion states (Dimension 2)
 
         # Compute loss for Dimension 1, applying mask
         loss_dim1 = self.criterion(outputs[mask_dim1], labels[mask_dim1]) if mask_dim1.any() else 0
@@ -44,15 +43,8 @@ class Model(Model):
         # Adjust labels for Dimension 2 and compute loss
         loss_dim2 = self.criterion(outputs[mask_dim2], labels[mask_dim2]) if mask_dim2.any() else 0
 
-        alpha_dim1 = 1/mask_dim1.sum() if mask_dim1.any() else 1
-        alpha_dim2 = 1/mask_dim2.sum() if mask_dim2.any() else 1
-
-        # Define weighting factors considering log-variance and data length
-        weight_dim1 = alpha_dim1 / (2 * torch.exp(self.log_var_dim1)**2)
-        weight_dim2 = alpha_dim2 / (2 * torch.exp(self.log_var_dim2)**2)
-
         # Combine the two losses with adjusted weighting factors
-        loss = (weight_dim1 * loss_dim1 + weight_dim2 * loss_dim2) / (self.log_var_dim1 + self.log_var_dim2)
+        loss = loss_dim1 + loss_dim2
 
         # Calculate Top-1 and Top-5 accuracy only for the first 100 classes
         if mask_dim1.any():
