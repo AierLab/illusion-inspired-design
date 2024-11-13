@@ -1,3 +1,14 @@
+# Function to check if GPU is free
+check_gpu_free() {
+    while nvidia-smi | grep -q 'python'; do
+        echo "Waiting for GPU to be free..."
+        sleep 10
+    done
+}
+
+# Check and wait for GPU to be free before starting
+check_gpu_free
+
 source .venv/bin/activate
 
 # config_name=m_X_102
@@ -15,7 +26,7 @@ config_names=(
     # "m_X-102-cifar100"
     # "m_X-202-cifar100"
     # "m_X-102_v2-cifar100"
-    # "m_X-102_v3-cifar100"
+    "m_X-102_v3-cifar100"
     # "m_X-103-cifar100"
     # "m_X-comp-cifar100"
     # "m_X-comp_reverse-cifar100"
@@ -27,19 +38,20 @@ config_names=(
     # "m_X-102-imagenet100"
     # "m_X-202-imagenet100"
     # "m_X-102_v2-imagenet100"
-    # "m_X-102_v3-imagenet100"
+    "m_X-102_v3-imagenet100"
     # "m_X-103-imagenet100"
     # "m_X-comp-imagenet100"
     # "m_X-comp_reverse-imagenet100"
 
+    "m_B-none-imagenet1k_2002"
     "m_B-none-imagenet1k"
-    # "m_X-102-imagenet1k"
-    "m_X-202-imagenet1k"
-    # "m_X-102_v2-imagenet1k"
-    # "m_X-102_v3-imagenet1k"
-    # "m_X-103-imagenet1k"
-    # "m_X-comp-imagenet1k"
-    # "m_X-comp_reverse-imagenet1k"
+    "m_X-102-imagenet1k"
+    # "m_X-202-imagenet1k"
+    "m_X-102_v2-imagenet1k"
+    "m_X-102_v3-imagenet1k"
+    "m_X-103-imagenet1k"
+    "m_X-comp-imagenet1k"
+    "m_X-comp_reverse-imagenet1k"
 )
 
 

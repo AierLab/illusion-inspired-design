@@ -1,0 +1,15 @@
+defaults:
+  - _base
+
+data:
+  name: imagenet1k
+
+model:
+  task: "m_B"
+  exp_name: illusion_augmented_image_classification_model_imagenet1k
+  num_classes: 2002
+
+trainer:
+  max_epochs: 5
+  patience: 1
+
