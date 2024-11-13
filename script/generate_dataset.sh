@@ -11,3 +11,7 @@ source .venv/bin/activate
 cd data/indl_dataset_generate
 
 python main.py --train_dir ../../datasets/indl/train --test_dir ../../datasets/indl/test
+
+cd ../..
+
+python data/imagenet1k_filter100.py

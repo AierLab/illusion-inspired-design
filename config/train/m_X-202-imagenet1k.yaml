@@ -5,8 +5,8 @@ data:
   name: indl_and_imagenet1k
 
 model:
-  task: "m_X_102"
-  num_classes: 1002
+  task: "m_X_202"
+  num_classes: 2002
 
 
 trainer:

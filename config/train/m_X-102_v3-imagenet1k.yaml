@@ -5,9 +5,8 @@ data:
   name: indl_and_imagenet1k
 
 model:
-  task: "m_X_102"
+  task: "m_X_102_v3"
   num_classes: 1002
-
 
 trainer:
   max_epochs: 5

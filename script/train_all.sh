@@ -13,21 +13,30 @@ config_names=(
 
     # "m_B-none-cifar100"
     # "m_X-102-cifar100"
+    # "m_X-202-cifar100"
     # "m_X-102_v2-cifar100"
-    "m_X-103-cifar100"
+    # "m_X-102_v3-cifar100"
+    # "m_X-103-cifar100"
     # "m_X-comp-cifar100"
     # "m_X-comp_reverse-cifar100"
 
-    "m_B-none-imagenet100"
-    "m_X-102-imagenet100"
-    "m_X-102_v2-imagenet100"
-    "m_X-103-imagenet100"
-    "m_X-comp-imagenet100"
-    "m_X-comp_reverse-imagenet100"
+    # "m_VAE_cifar100" # TODO
+    # "m_VAE-adapter_cifar100" # TODO
 
-    # "m_B-none-imagenet1k"
+    # "m_B-none-imagenet100"
+    # "m_X-102-imagenet100"
+    # "m_X-202-imagenet100"
+    # "m_X-102_v2-imagenet100"
+    # "m_X-102_v3-imagenet100"
+    # "m_X-103-imagenet100"
+    # "m_X-comp-imagenet100"
+    # "m_X-comp_reverse-imagenet100"
+
+    "m_B-none-imagenet1k"
     # "m_X-102-imagenet1k"
+    "m_X-202-imagenet1k"
     # "m_X-102_v2-imagenet1k"
+    # "m_X-102_v3-imagenet1k"
     # "m_X-103-imagenet1k"
     # "m_X-comp-imagenet1k"
     # "m_X-comp_reverse-imagenet1k"

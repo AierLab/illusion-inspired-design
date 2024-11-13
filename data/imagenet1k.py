@@ -25,8 +25,8 @@ transform_test = transforms.Compose([
 ])
 
 # Load datasets
-train_dataset = load_dataset('/workspace/Illusion_Res/datasets/imagenet-1k', split='train', trust_remote_code=True, cache_dir="tmp/cache")
-val_dataset = load_dataset('/workspace/Illusion_Res/datasets/imagenet-1k', split='validation', trust_remote_code=True, cache_dir="tmp/cache")
+train_dataset = load_dataset('/home/gus.xia/haobo/ai701-illusion-inspired-design/datasets/imagenet-1k', split='train', trust_remote_code=True, cache_dir="tmp/cache")
+val_dataset = load_dataset('/home/gus.xia/haobo/ai701-illusion-inspired-design/datasets/imagenet-1k', split='validation', trust_remote_code=True, cache_dir="tmp/cache")
 
 # Apply transformations manually
 class TransformedDataset(torch.utils.data.Dataset):

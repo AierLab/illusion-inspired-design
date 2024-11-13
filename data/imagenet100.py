@@ -30,7 +30,7 @@ transform_test = transforms.Compose([
 num_class=100
 
 # Load datasets
-dataset_path = f"/workspace/Illusion_Res/datasets/imagenet-1k-{num_class}"
+dataset_path = f"/home/gus.xia/haobo/ai701-illusion-inspired-design/datasets/imagenet-1k-{num_class}"
 train_dataset = datasets.load_from_disk(f"{dataset_path}/train")
 val_dataset = datasets.load_from_disk(f"{dataset_path}/validation")
 

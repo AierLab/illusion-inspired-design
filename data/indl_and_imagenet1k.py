@@ -1,5 +1,5 @@
 import torch
-from .imagenet1k import train_dataset, val_dataset
+from .imagenet1k import trainset_transformed as train_dataset, valset_transformed as val_dataset
 from .indl224 import combined_trainset, combined_testset
 from ._base import *
 from torch.utils.data import ConcatDataset, DataLoader, Dataset
@@ -14,10 +14,13 @@ class StandardizeDataset(Dataset):
     def __getitem__(self, idx):
         item = self.dataset[idx]
 
-        if isinstance(item, tuple) and len(item) == 2:
+        if isinstance(item, tuple):
             data, label = item
+        elif isinstance(item, dict):
+            data, label = item["image"], item["label"]
         else:
-            raise TypeError("Unexpected data structure in dataset.")
+            print(f"Item at index {idx} is not a tuple with 2 elements, with elements: {item}")
+            return self.__getitem__(idx + 1)  # Skip this item and move to the next one
 
         # Convert data and label to tensors if they aren’t already
         data = torch.tensor(data) if not isinstance(data, torch.Tensor) else data
@@ -59,6 +62,7 @@ modified_combined_testset = LabelModifier(combined_testset)
 # Wrap all datasets with StandardizeDataset to ensure uniform format
 train_dataset_standardized = StandardizeDataset(train_dataset)
 val_dataset_standardized = StandardizeDataset(val_dataset)
+
 modified_combined_trainset_standardized = StandardizeDataset(modified_combined_trainset)
 modified_combined_testset_standardized = StandardizeDataset(modified_combined_testset)
 
@@ -74,10 +78,10 @@ combined_testset_final = ConcatDataset([
 ])
 
 # Create DataLoader for combined training dataset
-trainloader_combined = DataLoader(combined_trainset_final, batch_size=128, shuffle=True, num_workers=num_workers, pin_memory=True)
+trainloader_combined = DataLoader(combined_trainset_final, batch_size=200, shuffle=True, num_workers=num_workers, pin_memory=True)
 
 # Create DataLoader for combined testing dataset (with labels changed to 11 and 12)
-testloader_combined = DataLoader(combined_testset_final, batch_size=128, shuffle=False, num_workers=num_workers, pin_memory=True)
+testloader_combined = DataLoader(combined_testset_final, batch_size=200, shuffle=False, num_workers=num_workers, pin_memory=True)
 
 # Output DataLoader summary
 print("\nCombined DataLoader Summary:")

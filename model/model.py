@@ -76,4 +76,5 @@ class Model(LightningModule):
             mode='exp_range'      # Choose the mode; 'triangular', 'triangular2', or 'exp_range'
         )
         return {"optimizer": optimizer, "lr_scheduler": scheduler}
+        # return {"optimizer": optimizer}
 

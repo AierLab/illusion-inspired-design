@@ -10,4 +10,4 @@ model:
 
 trainer:
   max_epochs: 10
-  patience: 5
+  patience: 3
