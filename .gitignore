@@ -13,3 +13,6 @@ wandb
 models
 archive
 datasets
+tmp
+log
+checkpoints

@@ -1,0 +1,8 @@
+defaults:
+  - _base
+
+data:
+  name: cifar100
+
+model:
+  task: "m_B"

@@ -1,0 +1,10 @@
+defaults:
+  - _base
+
+data:
+  name: indl224
+
+model:
+  task: "m_A"
+  exp_name: illusion_classification_model_indl
+  num_classes: 2

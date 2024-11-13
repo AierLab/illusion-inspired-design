@@ -1,0 +1,32 @@
+defaults:
+  - _self_
+
+hydra:
+  run:
+    dir: tmp/hydra
+  output_subdir: "%Y-%m-%d/%H-%M-%S"
+
+data:
+  name: indl_and_cifar100
+
+model:
+  task: m_VAE
+  name: resnet50
+  lr: 1e-3
+  latent_dim: 202
+
+trainer:
+  max_epochs: 50
+  patience: 10
+  accelerator: gpu
+  exp_name: illusion_augmented_image_classification_model
+  logger_project: illusion_augmented_models
+  logger_save_dir: ./tmp/models
+  logger_name: ${model.task}_${model.name}_${data.name}
+  save_top_k: 1
+  monitor_metric: val_loss
+  checkpoint_dir: tmp/models/${model.task}_${model.name}_${data.name}/
+  devices: 4
+  use_pretrained: True
+  vector_shift_path: tmp/models/${model.task}_${model.name}_${data.name}/vector_shift
+

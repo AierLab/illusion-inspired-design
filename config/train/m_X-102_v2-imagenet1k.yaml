@@ -1,0 +1,13 @@
+defaults:
+  - _base
+
+data:
+  name: indl_and_imagenet1k
+
+model:
+  task: "m_X_102_v2"
+  num_classes: 1002
+
+trainer:
+  max_epochs: 5
+  patience: 1
