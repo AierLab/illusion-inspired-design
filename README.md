@@ -75,6 +75,28 @@ This project uses the **[INDL Dataset](https://github.com/AierLab/indl-dataset)*
 ---
 
 ## Getting Started
+Here’s a formatted guide for getting started with the pretrained checkpoints:
+
+---
+
+### [Optional] Download Pretrained Checkpoints 
+
+1. **Download Pretrained Checkpoints**  
+   Access the pretrained checkpoints from the provided [Google Drive link](https://drive.google.com/drive/folders/1DEhBiSJGRuxYD4ypEj4z4wRVDwYW-v4X?usp=sharing). And put models in `tmp/models` directory.
+
+3. **Organize the Files**  
+   After downloading, place the files in the directory:  
+   ```
+   config/train/_base.yaml
+   ```
+
+4. **Update Configuration File**  
+   Modify the configuration file to enable pretrained checkpoints:  
+   Open `config/train/_base.yaml` and set:  
+   ```yaml
+   trainer:
+       use_pretrain: True
+   ```
 
 ### Setting Up Your Environment
 
