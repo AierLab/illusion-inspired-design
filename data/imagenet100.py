@@ -1,5 +1,7 @@
 if __name__ == "__main__":
-    num_workers = 32
+    import os
+    # num_workers = os.cpu_count() // 8
+    num_workers = 16
 else:
     from ._base import num_workers
 from datasets import load_dataset
@@ -9,7 +11,7 @@ from torchvision import transforms
 import torch
 from PIL import Image
 
-datasets.config.IN_MEMORY_MAX_SIZE = 32
+datasets.config.IN_MEMORY_MAX_SIZE = 230
 
 # Define transformations for training and testing sets
 transform_train = transforms.Compose([

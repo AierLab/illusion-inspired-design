@@ -10,6 +10,6 @@ model:
   num_classes: 1000
 
 trainer:
-  max_epochs: 5
-  patience: 1
+  max_epochs: 80
+  patience: 10
 

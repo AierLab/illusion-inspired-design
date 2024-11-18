@@ -18,8 +18,11 @@ class Model(Model):
         acc_all_top5 = torch.tensor([(label in top5) for label, top5 in zip(labels, top5_preds_all)]).float().mean().item()
 
         # Filter labels within the range of 0 to 99 (val_B)
-        valid_indices = (labels >= 0) & (labels <= 99)
-
+        if self.num_classes > 500:
+            valid_indices = (labels >= 0) & (labels <= 999)
+        else:
+            valid_indices = (labels >= 0) & (labels <= 99)
+            
         if valid_indices.any():
             valid_images = images[valid_indices]
             valid_labels = labels[valid_indices]
@@ -44,7 +47,11 @@ class Model(Model):
             acc_valid_top5 = None
 
         # Filter labels outside the range of 0 to 99 (val_exc for exclusive labels 100-101)
-        exc_indices = (labels >= 100) & (labels <= 101)
+        
+        if self.num_classes > 500:
+            exc_indices = (labels >= 1000) & (labels <= 1001)
+        else:
+            exc_indices = (labels >= 100) & (labels <= 101)
 
         if exc_indices.any():
             exc_images = images[exc_indices]

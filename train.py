@@ -40,11 +40,11 @@ def train(cfg: DictConfig):
             save_top_k=cfg.trainer.save_top_k,
             mode="min",
         )
-        early_stopping = EarlyStopping(
-            monitor="val_loss",  # Metric to monitor for VAE
-            patience=cfg.trainer.patience,  # Number of epochs with no improvement
-            mode="min"  # "min" because we want to minimize validation loss
-        )
+        # early_stopping = EarlyStopping(
+        #     monitor="val_loss",  # Metric to monitor for VAE
+        #     patience=cfg.trainer.patience,  # Number of epochs with no improvement
+        #     mode="min"  # "min" because we want to minimize validation loss
+        # )
     else:
         # Callbacks
         checkpoint_callback = ModelCheckpoint(
@@ -54,11 +54,11 @@ def train(cfg: DictConfig):
             save_top_k=cfg.trainer.save_top_k,
             mode="max",
         )
-        early_stopping = EarlyStopping(
-            monitor="val_top1_acc",  # Metric to monitor
-            patience=cfg.trainer.patience,  # Number of epochs with no improvement
-            mode="max"  # "min" or "max"
-        )
+        # early_stopping = EarlyStopping(
+        #     monitor="val_top1_acc",  # Metric to monitor
+        #     patience=cfg.trainer.patience,  # Number of epochs with no improvement
+        #     mode="max"  # "min" or "max"
+        # )
 
 
     # Path for latest checkpoint
@@ -114,10 +114,12 @@ def train(cfg: DictConfig):
     trainer = Trainer(
         max_epochs=cfg.trainer.max_epochs,
         logger=wandb_logger,
-        callbacks=[checkpoint_callback, lr_monitor, early_stopping],
+        # callbacks=[checkpoint_callback, lr_monitor, early_stopping],
+        callbacks=[checkpoint_callback, lr_monitor],
         accelerator=cfg.trainer.accelerator,
         strategy="ddp",
-        devices=cfg.trainer.devices
+        devices=cfg.trainer.devices,
+        val_check_interval=0.5,
     )
 
     # Model training

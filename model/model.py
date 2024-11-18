@@ -8,7 +8,7 @@ class Model(LightningModule):
         self.save_hyperparameters()
 
         # Load pre-trained ResNet50 model from timm with the correct number of classes
-        self.model = create_model(model_name, pretrained=True, num_classes=num_classes)
+        self.model = create_model(model_name, pretrained=False, num_classes=num_classes)
 
         # Loss function and learning rate
         self.criterion = nn.CrossEntropyLoss()

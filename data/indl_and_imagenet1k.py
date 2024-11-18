@@ -78,10 +78,10 @@ combined_testset_final = ConcatDataset([
 ])
 
 # Create DataLoader for combined training dataset
-trainloader_combined = DataLoader(combined_trainset_final, batch_size=200, shuffle=True, num_workers=num_workers, pin_memory=True)
+trainloader_combined = DataLoader(combined_trainset_final, batch_size=256, shuffle=True, num_workers=num_workers, pin_memory=True)
 
 # Create DataLoader for combined testing dataset (with labels changed to 11 and 12)
-testloader_combined = DataLoader(combined_testset_final, batch_size=200, shuffle=False, num_workers=num_workers, pin_memory=True)
+testloader_combined = DataLoader(combined_testset_final, batch_size=256, shuffle=False, num_workers=num_workers, pin_memory=True)
 
 # Output DataLoader summary
 print("\nCombined DataLoader Summary:")

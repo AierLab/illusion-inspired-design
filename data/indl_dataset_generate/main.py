@@ -10,10 +10,10 @@ def main():
     parser.add_argument('--test_dir', type=str, help='Path to the testing directory')
     args = parser.parse_args()
 
-    planner = Planner(train_dir=args.train_dir, test_dir=args.test_dir, positive_ratio=0.4)
+    planner = Planner(train_dir=args.train_dir, test_dir=args.test_dir, positive_ratio=0.5)
     
     def generate_dataset(dataset):
-        planner.generate(dataset, size=2000)
+        planner.generate(dataset, size=20000)
 
     datasets = [dataset01, dataset02, dataset03, dataset04, dataset05]
 

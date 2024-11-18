@@ -13,7 +13,7 @@ class ResNetVAE(LightningModule):
         self.save_hyperparameters()
         
         # Load pre-trained ResNet as the encoder backbone
-        self.encoder = create_model(model_name, pretrained=True)
+        self.encoder = create_model(model_name, pretrained=False)
         self.encoder.fc = nn.Identity()  # Remove the final fully connected layer
         
         # Define the output dimensions of the encoder
