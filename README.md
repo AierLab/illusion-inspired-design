@@ -142,7 +142,6 @@ If you find our work helpful, please consider citing our paper:
 ```latex
 @inproceedings{illusion2024,
   title={Geometric Illusion-Augmented Image Classification},
-  author={Haobo Yang, Minghao Guo, Dequan Yang},
   booktitle={Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
   year={2024}
 }
