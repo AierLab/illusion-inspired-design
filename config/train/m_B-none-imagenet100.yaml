@@ -9,5 +9,5 @@ model:
   exp_name: illusion_augmented_image_classification_model_imagenet1k_100
 
 trainer:
-  max_epochs: 10
-  patience: 3
+  max_epochs: 80
+  patience: 10

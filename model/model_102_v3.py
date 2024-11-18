@@ -9,40 +9,40 @@ class DependencyModel:
         self.fitted = False
 
     def fit(self, loss_dim1_values, loss_dim2_values):
-        # Convert losses to numpy arrays
-        loss_dim1_values = np.array(loss_dim1_values)
-        loss_dim2_values = np.array(loss_dim2_values)
-        # Add small epsilon to avoid log(0)
+        # Convert accumulated loss values to PyTorch tensors
+        loss_dim1_values = torch.tensor(loss_dim1_values)
+        loss_dim2_values = torch.tensor(loss_dim2_values)
         epsilon = 1e-8
-        log_loss_dim1_values = np.log(loss_dim1_values + epsilon)
-        log_loss_dim2_values = np.log(loss_dim2_values + epsilon)
-        data = np.vstack((log_loss_dim1_values, log_loss_dim2_values)).T
-        self.mu = np.mean(data, axis=0)
-        self.cov = np.cov(data, rowvar=False)
+        log_loss_dim1_values = torch.log(loss_dim1_values + epsilon)
+        log_loss_dim2_values = torch.log(loss_dim2_values + epsilon)
+        data = torch.stack((log_loss_dim1_values, log_loss_dim2_values), dim=1)
+        self.mu = torch.mean(data, dim=0)
+        self.cov = torch.cov(data.T)
         self.fitted = True
 
     def predict_dependency_loss(self, loss_dim1, loss_dim2):
         if not self.fitted:
-            return 0.0  # Default additional loss if not fitted
+            return torch.tensor(0.0, device=loss_dim1.device)
         epsilon = 1e-8
-        log_loss_dim1 = np.log(loss_dim1 + epsilon)
-        log_loss_dim2 = np.log(loss_dim2 + epsilon)
-        mu_x = self.mu[0]
-        mu_y = self.mu[1]
+        log_loss_dim1 = torch.log(loss_dim1 + epsilon)
+        log_loss_dim2 = torch.log(loss_dim2 + epsilon)
+        mu_x, mu_y = self.mu
         sigma_xx = self.cov[0, 0]
         sigma_xy = self.cov[0, 1]
         sigma_yy = self.cov[1, 1]
         # Ensure positive variance
         if sigma_xx <= 0 or sigma_yy <= 0:
-            return 0.0
-        sigma_cond = sigma_yy - (sigma_xy**2 / sigma_xx)
+            return torch.tensor(0.0, device=loss_dim1.device)
+        sigma_cond = sigma_yy - sigma_xy**2 / sigma_xx
         if sigma_cond <= 0:
-            return 0.0
+            return torch.tensor(0.0, device=loss_dim1.device)
         # Compute conditional mean
-        mu_cond = mu_y + (sigma_xy / sigma_xx) * (log_loss_dim1 - mu_x)
+        mu_cond = mu_y + sigma_xy / sigma_xx * (log_loss_dim1 - mu_x)
         # Compute negative log-likelihood
-        nll = 0.5 * np.log(2 * np.pi * sigma_cond) + 0.5 * ((log_loss_dim2 - mu_cond)**2 / sigma_cond)
-        return nll  # This is the third loss
+        nll = 0.5 * torch.log(2 * torch.pi * sigma_cond) + 0.5 * ((log_loss_dim2 - mu_cond)**2 / sigma_cond)
+        return nll
+
+
 
 class Model(BaseModel):
     def __init__(self, model_name, steps_per_epoch, num_classes, lr, update_interval=50):
@@ -78,9 +78,8 @@ class Model(BaseModel):
             self.loss_dim1_values = []
             self.loss_dim2_values = []
 
-        # Obtain third loss from dependency model
-        third_loss_value = self.dependency_model.predict_dependency_loss(loss_dim1.item(), loss_dim2.item())
-        third_loss = torch.tensor(third_loss_value, dtype=outputs.dtype, device=outputs.device)
+        # Compute third loss without detaching from the computational graph
+        third_loss = self.dependency_model.predict_dependency_loss(loss_dim1, loss_dim2)
 
         # Combine losses
         total_loss = loss_dim1 + loss_dim2 + third_loss

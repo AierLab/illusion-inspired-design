@@ -18,7 +18,7 @@ model:
   ckpt_path_B: none
 
 trainer:
-  max_epochs: 50
+  max_epochs: 80
   patience: 10
   accelerator: gpu
   exp_name: illusion_augmented_image_classification_model
@@ -29,4 +29,4 @@ trainer:
   monitor_metric: val_top1_acc
   checkpoint_dir: tmp/models/${model.task}_${model.name}_${data.name}/
   devices: 4
-  use_pretrained: True
+  use_pretrained: False

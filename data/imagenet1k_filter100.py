@@ -1,10 +1,11 @@
-num_workers = 32
 from datasets import load_dataset
 import datasets
 import os
 import shutil
+# num_workers = os.cpu_count() // 8
+num_workers = 16
 
-datasets.config.IN_MEMORY_MAX_SIZE = 32
+datasets.config.IN_MEMORY_MAX_SIZE = 230
 
 num_class = 100
 

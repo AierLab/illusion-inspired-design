@@ -12,7 +12,7 @@ class ModelComp(LightningModule):
         # self.model_A = create_model("resnet50", pretrained=False, num_classes=2)
         # self.model_A.load_state_dict(torch.load(ckpt_path_A)["state_dict"], map_location="cpu")
         # self.model_B = Model_base.load_from_checkpoint(ckpt_path_B, map_location="cpu").model
-        self.model_B = create_model(model_name, pretrained=True, num_classes=num_classes)
+        self.model_B = create_model(model_name, pretrained=False, num_classes=num_classes)
         # self.model_B = create_model("resnet50", pretrained=False, num_classes=2)
         # self.model_B.load_state_dict(torch.load(ckpt_path_B)["state_dict"], map_location="cpu")
 

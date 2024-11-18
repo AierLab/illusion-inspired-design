@@ -16,7 +16,7 @@ model:
   latent_dim: 202
 
 trainer:
-  max_epochs: 50
+  max_epochs: 80
   patience: 10
   accelerator: gpu
   exp_name: illusion_augmented_image_classification_model
@@ -27,6 +27,6 @@ trainer:
   monitor_metric: val_loss
   checkpoint_dir: tmp/models/${model.task}_${model.name}_${data.name}/
   devices: 4
-  use_pretrained: True
+  use_pretrained: False
   vector_shift_path: tmp/models/${model.task}_${model.name}_${data.name}/vector_shift
 
