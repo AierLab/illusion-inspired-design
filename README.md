@@ -75,14 +75,12 @@ This project uses the **[INDL Dataset](https://github.com/AierLab/indl-dataset)*
 ---
 
 ## Getting Started
-Here’s a formatted guide for getting started with the pretrained checkpoints:
-
----
 
 ### [Optional] Download Pretrained Checkpoints 
 
 1. **Download Pretrained Checkpoints**  
-   Access the pretrained checkpoints from the provided [Google Drive link](https://drive.google.com/drive/folders/1DEhBiSJGRuxYD4ypEj4z4wRVDwYW-v4X?usp=sharing). And put models in `tmp/models` directory.
+   Access the pretrained checkpoints from the provided [Google Drive link](https://drive.google.com/drive/folders/1DEhBiSJGRuxYD4ypEj4z4wRVDwYW-v4X?usp=sharing).
+   And put models in `tmp/models` directory.
 
 3. **Organize the Files**  
    After downloading, place the files in the directory:  
@@ -115,10 +113,6 @@ Here’s a formatted guide for getting started with the pretrained checkpoints:
    pip install -r requirements.txt
    ```
 
-### Additional Configuration
-
-- To fine-tune or customize training settings, please refer to the configuration files available in the `config/train` directory. These configuration files offer a comprehensive set of parameters for adjusting the training, data augmentation, and evaluation settings according to your needs.
-
 ---
 
 ## Running the Training Pipeline
@@ -137,7 +131,7 @@ The script supports multiple configurations and includes hooks for logging, chec
 
 This repository is powered by the **INDL Dataset**, which is central to our research. It is used for generating both training and testing data, offering a diverse range of synthetic illusions that challenge traditional perception algorithms.
 
-All experimental results are available in **Weights & Biases (wandb)** for easy visualization and analysis.
+All experimental results are available in **Weights & Biases (wandb)** for easy visualization and analysis. You may train it and see the result of validation.
 
 ---
 
