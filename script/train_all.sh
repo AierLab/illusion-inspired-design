@@ -26,7 +26,7 @@ config_names=(
     # "m_X-102_v2-cifar100"
     # "m_X-103-cifar100"
 
-    # "m_B-none-imagenet100"
+    "m_B-none-imagenet100"
     # "m_X-102-imagenet100"
     # "m_X-202-imagenet100"
     # "m_X-102_v2-imagenet100"
@@ -34,7 +34,7 @@ config_names=(
 )
 
 model_names=(
-    "vit_base_patch16_clip_384"
+    # "vit_base_patch16_clip_384"
     "resnet50"
     "vgg16"
 )

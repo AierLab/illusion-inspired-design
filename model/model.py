@@ -17,7 +17,7 @@ class Model(LightningModule):
         
         self.num_classes = num_classes
         
-        self.num_epochs = 80
+        self.num_epochs = 160
 
     def forward(self, x):
         # Forward pass through the entire model

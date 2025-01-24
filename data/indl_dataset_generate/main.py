@@ -15,7 +15,7 @@ def main():
     def generate_dataset(dataset):
         planner.generate(dataset, size=20000)
 
-    datasets = [dataset01, dataset02, dataset03, dataset04, dataset05]
+    datasets = [dataset02, dataset05] # dataset01, , dataset03, dataset04, 
 
     with ThreadPoolExecutor() as executor:
         executor.map(generate_dataset, datasets)

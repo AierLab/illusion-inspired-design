@@ -9,18 +9,16 @@ import os
 
 # Define transformations for training and testing sets
 transform_train = transforms.Compose([
-    transforms.Resize((224, 224)),  # Resize all images
-    transforms.RandomCrop(224, padding=4),
-    transforms.RandomHorizontalFlip(),
+    transforms.AutoAugment(policy=transforms.AutoAugmentPolicy.IMAGENET),
     transforms.ToTensor(),
-    transforms.Normalize(mean=[x / 255.0 for x in [0.507, 0.487, 0.441]],
-                         std=[x / 255.0 for x in [0.267, 0.256, 0.276]])])
+    transforms.Normalize((0.485, 0.456, 0.406), (0.229, 0.224, 0.225))  # Normalize with ImageNet mean and std
+])
 
 transform_test = transforms.Compose([
-    transforms.Resize((224, 224)),  # Resize all images
+    transforms.Resize(226),             # Resize the shortest side to 256 pixels
+    transforms.CenterCrop(224),               # Center crop to 224x224    transforms.ToTensor(),
     transforms.ToTensor(),
-    transforms.Normalize(mean=[x / 255.0 for x in [0.507, 0.487, 0.441]],
-                         std=[x / 255.0 for x in [0.267, 0.256, 0.276]])
+    transforms.Normalize((0.485, 0.456, 0.406), (0.229, 0.224, 0.225))  # Same normalization as training
 ])
 
 num_class = 100  # Filter the first 100 classes if necessary

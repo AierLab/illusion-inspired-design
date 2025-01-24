@@ -5,20 +5,17 @@ from torch.utils.data import TensorDataset, DataLoader
 
 # Normalize training set together with augmentation
 transform_train = transforms.Compose([
-    # transforms.RandomCrop(32, padding=4),
-    transforms.Resize((384, 384)),
-    transforms.RandomHorizontalFlip(),
+    transforms.AutoAugment(policy=transforms.AutoAugmentPolicy.CIFAR10),  # Apply AutoAugment with CIFAR10 policy
     transforms.ToTensor(),
-    transforms.Normalize(mean=[x / 255.0 for x in [0.507, 0.487, 0.441]],
-                                     std=[x / 255.0 for x in [0.267, 0.256, 0.276]])
+    transforms.Normalize((0.5071, 0.4865, 0.4409), (0.2673, 0.2564, 0.2762)),
 ])
 
 # Normalize test set same as training set without augmentation
 transform_test = transforms.Compose([
-    transforms.Resize((384, 384)),
+    transforms.Resize(34),
+    transforms.CenterCrop(32),               # Center crop to 224x224
     transforms.ToTensor(),
-    transforms.Normalize(mean=[x / 255.0 for x in [0.507, 0.487, 0.441]],
-                                     std=[x / 255.0 for x in [0.267, 0.256, 0.276]])
+    transforms.Normalize((0.5071, 0.4865, 0.4409), (0.2673, 0.2564, 0.2762))
 ])
 
 # Download and load datasets
@@ -38,8 +35,8 @@ train_dataset = TensorDataset(train_data, train_labels)
 test_dataset = TensorDataset(test_data, test_labels)
 
 # Dataloaders
-trainloader_cifar100 = DataLoader(train_dataset, batch_size=256//8, shuffle=True, num_workers=num_workers, pin_memory=True)
-testloader_cifar100 = DataLoader(test_dataset, batch_size=256//8, shuffle=False, num_workers=num_workers, pin_memory=True)
+trainloader_cifar100 = DataLoader(train_dataset, batch_size=256//2, shuffle=True, num_workers=num_workers, pin_memory=True)
+testloader_cifar100 = DataLoader(test_dataset, batch_size=256//2, shuffle=False, num_workers=num_workers, pin_memory=True)
 
 # DataLoader Summary
 print("\nCifar100 DataLoader Summary:")
