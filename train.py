@@ -166,7 +166,7 @@ def calculate_and_save_vector_shift(cfg, model):
 
 def main():
     # Seed for reproducibility
-    seed_everything(42)
+    # seed_everything(42)
     
     args = parse_args()
     config_name = args.config_name

@@ -83,8 +83,8 @@ train_dataset = ImageNetDataset(train_dirs, labels_file, transform=transform_tra
 val_dataset = ImageNetDataset([val_dir], labels_file, transform=transform_test, num_classes=num_class)
 
 # Create DataLoaders
-trainloader_imagenet100 = DataLoader(train_dataset, batch_size=256, shuffle=True, num_workers=num_workers, pin_memory=True)
-testloader_imagenet100 = DataLoader(val_dataset, batch_size=256, shuffle=False, num_workers=num_workers, pin_memory=True)
+trainloader_imagenet100 = DataLoader(train_dataset, batch_size=256//8, shuffle=True, num_workers=num_workers, pin_memory=True)
+testloader_imagenet100 = DataLoader(val_dataset, batch_size=256//8, shuffle=False, num_workers=num_workers, pin_memory=True)
 
 # Output DataLoader summary
 print("\nImageNet-100 DataLoader Summary:")

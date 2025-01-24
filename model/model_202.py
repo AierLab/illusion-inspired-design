@@ -20,7 +20,8 @@ class Model(Model):
             self.split = 1000
         else:
             self.split = 100
-            
+        self.num_epochs = 80
+        
     def training_step(self, batch, batch_idx):
         """
         Training step to calculate weighted loss and target task accuracy.
@@ -200,18 +201,12 @@ class Model(Model):
         }
 
     def configure_optimizers(self):
-        """
-        Configures the optimizer and learning rate scheduler.
-
-        Returns:
-            dict: Optimizer and scheduler configuration.
-        """
         optimizer = torch.optim.AdamW(self.parameters(), lr=self.lr)
-        scheduler = torch.optim.lr_scheduler.CyclicLR(
+        scheduler = torch.optim.lr_scheduler.OneCycleLR(
             optimizer,
-            base_lr=self.lr / 10,
-            max_lr=self.lr,
-            step_size_up=self.steps_per_epoch // 2,
-            mode='exp_range'
+            max_lr=self.lr,        # Maximum learning rate
+            steps_per_epoch=self.steps_per_epoch,
+            epochs=self.num_epochs,
+            anneal_strategy='linear'  # Annealing strategy: 'cos' or 'linear'
         )
         return {"optimizer": optimizer, "lr_scheduler": scheduler}

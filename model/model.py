@@ -1,5 +1,5 @@
 from ._base import *
-from sklearn.metrics import accuracy_score
+from sklearn.metrics import accuracy_score, recall_score
 
 class Model(LightningModule):
     def __init__(self, model_name, steps_per_epoch, num_classes, lr):
@@ -16,6 +16,8 @@ class Model(LightningModule):
         self.steps_per_epoch = steps_per_epoch
         
         self.num_classes = num_classes
+        
+        self.num_epochs = 80
 
     def forward(self, x):
         # Forward pass through the entire model
@@ -72,13 +74,12 @@ class Model(LightningModule):
 
     def configure_optimizers(self):
         optimizer = torch.optim.AdamW(self.parameters(), lr=self.lr)
-        scheduler = torch.optim.lr_scheduler.CyclicLR(
+        scheduler = torch.optim.lr_scheduler.OneCycleLR(
             optimizer,
-            base_lr=self.lr / 10,  # Set the minimum learning rate (can be adjusted)
-            max_lr=self.lr,        # Set the maximum learning rate
-            step_size_up=self.steps_per_epoch // 2,  # Half of steps per epoch for increasing phase
-            mode='exp_range'      # Choose the mode; 'triangular', 'triangular2', or 'exp_range'
+            max_lr=self.lr,        # Maximum learning rate
+            steps_per_epoch=self.steps_per_epoch,
+            epochs=self.num_epochs,
+            anneal_strategy='linear'  # Annealing strategy: 'cos' or 'linear'
         )
         return {"optimizer": optimizer, "lr_scheduler": scheduler}
-        # return {"optimizer": optimizer}
 
