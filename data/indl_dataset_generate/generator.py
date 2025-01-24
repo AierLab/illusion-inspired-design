@@ -14,7 +14,7 @@ def dataset01(path, size, positive_ratio):
     # # Create a rotation transformation
     # rotation_transform = transforms.Affine2D()
 
-    label_df = pd.DataFrame(columns=['name', 'label', 'value', 'Illusion_Strength', 'Rotation','step_size', 'bend'])
+    label_df = pd.DataFrame(columns=['name', 'label', 'value', 'Illusion_Strength', 'Rotation', 'bend'])
     
     for i in tqdm(range(size)):
         # set the figure size and parameters
@@ -49,9 +49,8 @@ def dataset01(path, size, positive_ratio):
         rotate=np.random.randint(1, 180)
         fig.savefig(os.path.join(path, name))
         label_df.loc[len(label_df)] = [name, label, max_slope, step_size, rotate, bend]
-        
         img = Image.open(os.path.join(path, name))
-        rotate_img = img.rotate()                   
+        rotate_img = img.rotate(rotate)                   
         plt.imshow(rotate_img)
         plt.axis('off')
         plt.savefig(os.path.join(path, name))
