@@ -7,7 +7,7 @@
 #SBATCH --ntasks-per-node=1
 #SBATCH --cpus-per-task=8
 
-source .venv/bin/activate
+# source .venv/bin/activate
 
 cd data/indl_dataset_generate
 

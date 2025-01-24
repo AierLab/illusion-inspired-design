@@ -15,8 +15,7 @@ datasets.config.IN_MEMORY_MAX_SIZE = 230
 
 # Define transformations for training and testing sets
 transform_train = transforms.Compose([
-    transforms.Resize((226, 226)),  # Resize all images
-    transforms.RandomCrop(224),
+    transforms.RandomCrop(224, padding=4),
     transforms.RandomHorizontalFlip(),
     transforms.ToTensor(),
     transforms.Normalize(mean=[x / 255.0 for x in [0.507, 0.487, 0.441]],

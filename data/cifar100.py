@@ -14,6 +14,7 @@ transform_train = transforms.Compose([
 
 # Normalize test set same as training set without augmentation
 transform_test = transforms.Compose([
+    transforms.Resize((224, 224)),
     transforms.ToTensor(),
     transforms.Normalize(mean=[x / 255.0 for x in [0.507, 0.487, 0.441]],
                                      std=[x / 255.0 for x in [0.267, 0.256, 0.276]])

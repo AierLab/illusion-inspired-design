@@ -1,8 +1,0 @@
-defaults:
-  - m_VAE_cifar100
-
-
-model:
-  task: m_VAE_adapter
-  num_classes: 100
-  ckpt_path: none

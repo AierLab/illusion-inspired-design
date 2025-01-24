@@ -6,7 +6,7 @@ data:
 
 model:
   task: "m_B"
-  exp_name: illusion_augmented_image_classification_model_imagenet1k_100
+  exp_name: illusion_augmented_image_classification_model_imagenet100
 
 trainer:
   max_epochs: 80
