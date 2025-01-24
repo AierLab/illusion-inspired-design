@@ -42,7 +42,7 @@ combined_trainset_final = ConcatDataset([modified_combined_trainset, train_datas
 combined_testset_final = ConcatDataset([modified_combined_testset, test_dataset])
 
 # Create DataLoader for combined training dataset
-trainloader_combined = DataLoader(combined_trainset_final, batch_size=64, shuffle=True, num_workers=num_workers, pin_memory=True)
+trainloader_combined = DataLoader(combined_trainset_final, batch_size=256, shuffle=True, num_workers=num_workers, pin_memory=True)
 
 # Create DataLoader for combined testing dataset (with labels changed to 11 and 12)
-testloader_combined = DataLoader(combined_testset_final, batch_size=64, shuffle=False, num_workers=num_workers, pin_memory=True)
+testloader_combined = DataLoader(combined_testset_final, batch_size=256, shuffle=False, num_workers=num_workers, pin_memory=True)

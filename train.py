@@ -18,7 +18,7 @@ wandb.login(key="ef983325a8df31bd8b4f48223851b7e920c3f8ae")
 @hydra.main(version_base=None, config_path="config/train", config_name="default")
 def train(cfg: DictConfig):    
     Model = m.get_model(model_name=cfg.model.task)
-    train_dataloader, test_dataloader = data.get_dataloader(dataset_name=cfg.data.name)
+    train_dataloader, test_dataloader = data.get_dataloader(dataset_name=cfg.data.name, strength=cfg.data.strength)
     
     # Initialize Wandb logger with a careful naming convention for the model
     wandb_logger = WandbLogger(
@@ -174,6 +174,12 @@ def main():
     # Initialize Hydra and compose the config
     with initialize(config_path="config/train", version_base=None):
         cfg = compose(config_name=config_name)
+        if args.model_name:
+            cfg.model.name = args.model_name
+        if args.strength:
+            cfg.data.strength = args.strength
+        cfg.trainer.logger_name = f"{cfg.model.task}_{cfg.model.name}_{cfg.data.name}_{cfg.data.strength}"
+        cfg.trainer.checkpoint_dir =  f"tmp/models/{cfg.model.task}_{cfg.model.name}_{cfg.data.name}_{cfg.data.strength}/"
         train(cfg)  # Call `train` with the composed config
         
         # Path for latest checkpoint
@@ -196,6 +202,8 @@ def main():
 def parse_args():
     parser = argparse.ArgumentParser(description="Training script")
     parser.add_argument('--config_name', type=str, help='Name of the configuration')
+    parser.add_argument('--model_name', type=str, default=None, help='Name of the model we want to use (default: None)')
+    parser.add_argument('--strength', type=str, default=None, help='Strength of illusion we want (default: None)')
     return parser.parse_args()
 
 

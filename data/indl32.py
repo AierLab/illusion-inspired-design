@@ -1,6 +1,7 @@
 from ._base import *
 import torch
-from torch.utils.data import DataLoader, TensorDataset, ConcatDataset
+from torch.utils.data import DataLoader, TensorDataset, ConcatDataset, Subset
+import numpy as np
 
 transform_train = transforms.Compose([
     transforms.Resize((32, 32)),  # Resize all images to 32x32

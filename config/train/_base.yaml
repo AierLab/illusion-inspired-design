@@ -8,6 +8,7 @@ hydra:
 
 data:
   name: none
+  strength: none
 
 model:
   task: none
@@ -24,9 +25,9 @@ trainer:
   exp_name: illusion_augmented_image_classification_model
   logger_project: illusion_augmented_models
   logger_save_dir: ./tmp/models
-  logger_name: ${model.task}_${model.name}_${data.name}
+  logger_name: none
   save_top_k: 1
   monitor_metric: val_top1_acc
-  checkpoint_dir: tmp/models/${model.task}_${model.name}_${data.name}/
+  checkpoint_dir: none
   devices: 4
   use_pretrained: False

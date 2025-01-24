@@ -62,3 +62,5 @@ def dataset_filter(strength):
 
     print(f"First training batch - Images shape: {train_images.shape}, Labels shape: {train_labels.shape}")
     print(f"First testing batch - Images shape: {test_images.shape}, Labels shape: {test_labels.shape}")
+
+    return trainloader_indl, testloader_indl

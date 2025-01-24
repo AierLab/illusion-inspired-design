@@ -8,6 +8,7 @@ from PIL import Image
 from torchvision import transforms
 from sklearn.preprocessing import MinMaxScaler
 from scipy.stats import kstest
+import numpy as np
 
 num_workers = os.cpu_count()
 # num_workers = 16

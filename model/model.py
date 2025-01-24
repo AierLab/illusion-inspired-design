@@ -51,6 +51,9 @@ class Model(LightningModule):
         # Calculate Top-1 accuracy
         top1_preds = outputs.argmax(dim=1)
         top1_acc = accuracy_score(labels.cpu(), top1_preds.cpu())
+        
+        # Calculate recall
+        recall = recall_score(labels.cpu(), top1_preds.cpu(), average='macro')  # Use 'macro' for multi-class recall
 
         # Calculate Top-5 accuracy
         if self.num_classes >= 5:
@@ -63,6 +66,7 @@ class Model(LightningModule):
         # Log metrics
         self.log('val_loss', loss, prog_bar=True)
         self.log('val_top1_acc', top1_acc, prog_bar=True)
+        self.log('val_recall', recall, prog_bar=True)
 
         return loss
 

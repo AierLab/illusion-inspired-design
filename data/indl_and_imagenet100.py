@@ -1,5 +1,5 @@
 import torch
-from .imagenet100 import trainset_transformed as train_dataset, valset_transformed as val_dataset
+from .imagenet100 import train_dataset, val_dataset
 from .indl224 import combined_trainset, combined_testset
 from ._base import *
 from torch.utils.data import ConcatDataset, DataLoader, Dataset

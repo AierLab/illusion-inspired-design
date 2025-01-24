@@ -3,6 +3,7 @@ defaults:
 
 data:
   name: indl224
+  strength: 0.1
 
 model:
   task: "m_A"
