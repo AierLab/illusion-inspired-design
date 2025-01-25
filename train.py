@@ -55,9 +55,9 @@ def train(cfg: DictConfig):
             mode="max",
         )
         early_stopping = EarlyStopping(
-            monitor="val_loss",  # Metric to monitor
+            monitor="val_top1_acc",  # Metric to monitor
             patience=cfg.trainer.patience,  # Number of epochs with no improvement
-            mode="min"  # "min" or "max"
+            mode="max"  # "min" or "max"
         )
 
 

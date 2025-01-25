@@ -56,10 +56,10 @@ class Model(Model):
 
         # Assign weights based on correctness
         weights = torch.ones_like(outputs[:, 0])  # Default weight = 1.0
-        weights[correct_target & correct_illusion] = 0.25    # Both target and illusion correct
-        weights[correct_target & ~correct_illusion] = 0.5  # Correct target only
-        weights[~correct_target & correct_illusion] = 0.75  # Correct illusion only
-        weights[~correct_target & ~correct_illusion] = 1  # Both incorrect
+        weights[correct_target & correct_illusion] = 1    # Both target and illusion correct
+        weights[correct_target & ~correct_illusion] = 0.75  # Correct target only
+        weights[~correct_target & correct_illusion] = 0.5  # Correct illusion only
+        weights[~correct_target & ~correct_illusion] = 0.25  # Both incorrect
 
         # Compute weighted loss
         log_probs = torch.log_softmax(outputs, dim=1)  # Log probabilities
@@ -136,7 +136,8 @@ class Model(Model):
             
             # Weighted voting: combine outputs (weights can be adjusted as needed)
             # For simplicity, assume equal weights
-            target_outputs = (outputs_first_101 + outputs_last_101) / 2  
+            # target_outputs = (outputs_first_101 + 0.75 * outputs_last_101) / 1.75
+            target_outputs = outputs_first_101
             
             # Map only the relevant target task indices
             target_outputs = target_outputs[target_indices] 
