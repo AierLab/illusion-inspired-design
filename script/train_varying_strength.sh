@@ -7,7 +7,7 @@
 #SBATCH --ntasks-per-node=4
 #SBATCH --cpus-per-task=16
 
-source .venv/bin/activate
+# source .venv/bin/activate
 
 # config_name=m_X_102
 # python train.py --config_name $config_name > log/$config_name.log
@@ -18,11 +18,11 @@ mkdir -p $log_dir
 
 config_names=(
     "m_A-none-indl224"
+    "m_X-202-imagenet100"
 )
 
 model_names=(
     "resnet50"
-    "vgg16"
 )
 
 strengthes=(
@@ -39,8 +39,14 @@ strengthes=(
 
 for config_name in "${config_names[@]}"
 do
-    python train.py --config_name "$config_name" &> "$log_dir/$config_name.log"    
-    echo "Done: $config_name"
-    echo "Log: $log_dir/$config_name.log"
-    echo "======================================================================"
+    for model_name in "${model_names[@]}"
+    do
+        for strength in "${strengthes[@]}"
+        do
+            python train.py --config_name "$config_name" --model_name $model_name --strength "$strength" &> "$log_dir/$model_name.$config_name.$strength.log"    
+            echo "Done: $model_name.$config_name.$strength"
+            echo "$log_dir/$model_name.$config_name.$strength.log" 
+            echo "======================================================================"
+        done
+    done
 done

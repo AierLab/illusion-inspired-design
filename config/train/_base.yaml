@@ -7,27 +7,27 @@ hydra:
   output_subdir: "%Y-%m-%d/%H-%M-%S"
 
 data:
-  name: none
-  strength: none
+  name: 
+  strength: 
 
 model:
-  task: none
+  task: 
   name: resnet50 # 默认模型名称，可根据需求更改
   lr: 1e-3
   num_classes: 100
-  ckpt_path_A: none
-  ckpt_path_B: none
+  ckpt_path_A: 
+  ckpt_path_B: 
 
 trainer:
-  max_epochs: 160
+  max_epochs: 80
   patience: 10
   accelerator: gpu
   exp_name: illusion_augmented_image_classification_model
   logger_project: illusion_augmented_models
   logger_save_dir: ./tmp/models
-  logger_name: none
+  logger_name: 
   save_top_k: 1
   monitor_metric: val_top1_acc
-  checkpoint_dir: none
+  checkpoint_dir: 
   devices: 8
   use_pretrained: False

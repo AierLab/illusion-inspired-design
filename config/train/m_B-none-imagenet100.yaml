@@ -6,8 +6,4 @@ data:
 
 model:
   task: "m_B"
-  exp_name: illusion_augmented_image_classification_model_imagenet100
-
-trainer:
-  max_epochs: 80
-  patience: 10
+  num_classes: 202

@@ -7,16 +7,12 @@ transform_train = transforms.Compose([
     transforms.Resize((32, 32)),  # Resize all images to 32x32
     transforms.RandomRotation(degrees=180),
     transforms.ToTensor(),
-    transforms.Normalize(mean=[x / 255.0 for x in [0.507, 0.487, 0.441]],
-                                     std=[x / 255.0 for x in [0.267, 0.256, 0.276]])])
+])
 
 # Normalize test set same as training set without augmentation
 transform_test = transforms.Compose([
     transforms.Resize((32, 32)),  # Resize all images to 32x32
-    transforms.RandomRotation(degrees=180),
     transforms.ToTensor(),
-    transforms.Normalize(mean=[x / 255.0 for x in [0.507, 0.487, 0.441]],
-                                     std=[x / 255.0 for x in [0.267, 0.256, 0.276]])
 ])
 
 
@@ -35,8 +31,8 @@ for dataset_folder in ["dataset01", "dataset02", "dataset03", "dataset04", "data
     testset = MyDataset(test_data_dir, transforms=transform_test)
     
     # Select 1/10 of the data
-    train_indices = np.random.choice(len(trainset), len(trainset) // 10, replace=False)
-    test_indices = np.random.choice(len(testset), len(testset) // 10, replace=False)
+    train_indices = np.random.choice(len(trainset), len(trainset) // 50, replace=False)
+    test_indices = np.random.choice(len(testset), len(testset) // 50, replace=False)
     
     # Create subsets
     train_subset = Subset(trainset, train_indices)

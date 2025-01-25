@@ -40,11 +40,11 @@ def train(cfg: DictConfig):
             save_top_k=cfg.trainer.save_top_k,
             mode="min",
         )
-        # early_stopping = EarlyStopping(
-        #     monitor="val_loss",  # Metric to monitor for VAE
-        #     patience=cfg.trainer.patience,  # Number of epochs with no improvement
-        #     mode="min"  # "min" because we want to minimize validation loss
-        # )
+        early_stopping = EarlyStopping(
+            monitor="val_loss",  # Metric to monitor for VAE
+            patience=cfg.trainer.patience,  # Number of epochs with no improvement
+            mode="min"  # "min" because we want to minimize validation loss
+        )
     else:
         # Callbacks
         checkpoint_callback = ModelCheckpoint(
@@ -54,11 +54,11 @@ def train(cfg: DictConfig):
             save_top_k=cfg.trainer.save_top_k,
             mode="max",
         )
-        # early_stopping = EarlyStopping(
-        #     monitor="val_top1_acc",  # Metric to monitor
-        #     patience=cfg.trainer.patience,  # Number of epochs with no improvement
-        #     mode="max"  # "min" or "max"
-        # )
+        early_stopping = EarlyStopping(
+            monitor="val_loss",  # Metric to monitor
+            patience=cfg.trainer.patience,  # Number of epochs with no improvement
+            mode="min"  # "min" or "max"
+        )
 
 
     # Path for latest checkpoint
@@ -114,12 +114,10 @@ def train(cfg: DictConfig):
     trainer = Trainer(
         max_epochs=cfg.trainer.max_epochs,
         logger=wandb_logger,
-        # callbacks=[checkpoint_callback, lr_monitor, early_stopping],
-        callbacks=[checkpoint_callback, lr_monitor],
+        callbacks=[checkpoint_callback, lr_monitor, early_stopping],
         accelerator=cfg.trainer.accelerator,
-        strategy="ddp",
+        strategy="fsdp",
         devices=cfg.trainer.devices,
-        val_check_interval=0.5,
     )
 
     # Model training
@@ -166,7 +164,7 @@ def calculate_and_save_vector_shift(cfg, model):
 
 def main():
     # Seed for reproducibility
-    # seed_everything(42)
+    seed_everything(42)
     
     args = parse_args()
     config_name = args.config_name
@@ -176,7 +174,7 @@ def main():
         cfg = compose(config_name=config_name)
         if args.model_name:
             cfg.model.name = args.model_name
-        if args.strength:
+        if args.strength is not None:
             cfg.data.strength = args.strength
         cfg.trainer.logger_name = f"{cfg.model.task}_{cfg.model.name}_{cfg.data.name}_{cfg.data.strength}"
         cfg.trainer.checkpoint_dir =  f"tmp/models/{cfg.model.task}_{cfg.model.name}_{cfg.data.name}_{cfg.data.strength}/"
@@ -203,7 +201,7 @@ def parse_args():
     parser = argparse.ArgumentParser(description="Training script")
     parser.add_argument('--config_name', type=str, help='Name of the configuration')
     parser.add_argument('--model_name', type=str, default=None, help='Name of the model we want to use (default: None)')
-    parser.add_argument('--strength', type=str, default=None, help='Strength of illusion we want (default: None)')
+    parser.add_argument('--strength', type=float, default=None, help='Strength of illusion we want (default: None)')
     return parser.parse_args()
 
 

@@ -23,13 +23,19 @@ def get_dataloader(dataset_name: str, strength: float = None):
         from .imagenet100 import trainloader_imagenet100, testloader_imagenet100
         return trainloader_imagenet100, testloader_imagenet100
     elif dataset_name == "indl224":
-        if strength:
+        if strength is not None:
             from .indl224_filtered import dataset_filter
             trainloader_indl, testloader_indl = dataset_filter(strength)
             return trainloader_indl, testloader_indl
         from .indl224 import trainloader_indl, testloader_indl
         return trainloader_indl, testloader_indl
     elif dataset_name == "indl_and_imagenet100":
+        if strength is not None:
+            from .indl224_filtered import dataset_filter
+            combined_trainset, combined_testset = dataset_filter(strength, True)
+            from .indl_filtered_and_imagenet100 import dataset_combine
+            trainloader_indl, testloader_indl = dataset_combine(combined_trainset, combined_testset)
+            return trainloader_indl, testloader_indl
         from .indl_and_imagenet100 import trainloader_combined, testloader_combined
         return trainloader_combined, testloader_combined
     else:

@@ -9,7 +9,7 @@ class Model(Model):
         self.save_hyperparameters()
 
         # Load pre-trained ResNet50 model from timm with the correct number of classes
-        self.model = create_model(model_name, pretrained=False, num_classes=num_classes)
+        self.model = create_model(model_name, pretrained=True, num_classes=num_classes)
 
         # Loss function and learning rate
         self.criterion = nn.CrossEntropyLoss()
@@ -20,7 +20,6 @@ class Model(Model):
             self.split = 1000
         else:
             self.split = 100
-        self.num_epochs = 80
         
     def training_step(self, batch, batch_idx):
         """
@@ -131,8 +130,17 @@ class Model(Model):
         target_indices = (labels < self.split)  # Identify target task labels (0-99)
         if target_indices.any():
             # Extract outputs for target-specific indices
-            target_outputs = outputs[target_indices]  # Full 202-class outputs
-            target_labels = labels[target_indices] % self.split  # Map labels to target classes (0-99)
+            # Extract outputs for the first 101 and last 101 class outputs
+            outputs_first_101 = outputs[:, :101]  # First 101 class outputs
+            outputs_last_101 = outputs[:, -101:]  # Last 101 class outputs
+            
+            # Weighted voting: combine outputs (weights can be adjusted as needed)
+            # For simplicity, assume equal weights
+            target_outputs = (outputs_first_101 + outputs_last_101) / 2  
+            
+            # Map only the relevant target task indices
+            target_outputs = target_outputs[target_indices] 
+            target_labels = labels[target_indices]
 
             # Top-1 Accuracy for target task
             preds_target_top1 = target_outputs.argmax(dim=1) % self.split  # Map predictions to 0-99
@@ -202,11 +210,12 @@ class Model(Model):
 
     def configure_optimizers(self):
         optimizer = torch.optim.AdamW(self.parameters(), lr=self.lr)
-        scheduler = torch.optim.lr_scheduler.OneCycleLR(
+        
+        # Using ExponentialLR scheduler
+        scheduler = torch.optim.lr_scheduler.ExponentialLR(
             optimizer,
-            max_lr=self.lr,        # Maximum learning rate
-            steps_per_epoch=self.steps_per_epoch,
-            epochs=self.num_epochs,
-            anneal_strategy='linear'  # Annealing strategy: 'cos' or 'linear'
+            gamma=0.95  # Decay factor
         )
-        return {"optimizer": optimizer, "lr_scheduler": scheduler}
+        
+        return {"optimizer": optimizer, "lr_scheduler": {"scheduler": scheduler, "interval": "epoch"}}
+

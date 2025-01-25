@@ -7,6 +7,11 @@ import data
 # data.get_dataloader("indl224")
 # data.get_dataloader("indl_and_imagenet100")
 
+data.get_dataloader("indl224", 0)
 # data.get_dataloader("indl224", 0.3)
 # data.get_dataloader("indl224", 0.6)
 # data.get_dataloader("indl224", 0.9)
+
+data.get_dataloader("indl_and_imagenet100", 0.3)
+# data.get_dataloader("indl_and_imagenet100", 0.6)
+# data.get_dataloader("indl_and_imagenet100", 0.9)

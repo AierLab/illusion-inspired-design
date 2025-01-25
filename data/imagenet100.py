@@ -9,6 +9,8 @@ import os
 
 # Define transformations for training and testing sets
 transform_train = transforms.Compose([
+    transforms.Resize(226),             # Resize the shortest side to 256 pixels
+    transforms.CenterCrop(224), 
     transforms.AutoAugment(policy=transforms.AutoAugmentPolicy.IMAGENET),
     transforms.ToTensor(),
     transforms.Normalize((0.485, 0.456, 0.406), (0.229, 0.224, 0.225))  # Normalize with ImageNet mean and std
@@ -67,7 +69,11 @@ class ImageNetDataset(Dataset):
         if self.transform:
             image = self.transform(image)
         
+        # Print shapes for debugging
+        # print(f"Image shape: {image.size if not hasattr(image, 'shape') else image.shape}, Label: {label}")
+        
         return image, label
+
 
 # Dataset paths
 dataset_path = "/home/indl/workspace/illusion-inspired-design/datasets/imagenet100"

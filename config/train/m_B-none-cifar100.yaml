@@ -6,3 +6,4 @@ data:
 
 model:
   task: "m_B"
+  num_classes: 202

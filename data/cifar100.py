@@ -35,8 +35,8 @@ train_dataset = TensorDataset(train_data, train_labels)
 test_dataset = TensorDataset(test_data, test_labels)
 
 # Dataloaders
-trainloader_cifar100 = DataLoader(train_dataset, batch_size=256//2, shuffle=True, num_workers=num_workers, pin_memory=True)
-testloader_cifar100 = DataLoader(test_dataset, batch_size=256//2, shuffle=False, num_workers=num_workers, pin_memory=True)
+trainloader_cifar100 = DataLoader(train_dataset, batch_size=256//8, shuffle=True, num_workers=num_workers, pin_memory=True)
+testloader_cifar100 = DataLoader(test_dataset, batch_size=256, shuffle=False, num_workers=num_workers, pin_memory=True)
 
 # DataLoader Summary
 print("\nCifar100 DataLoader Summary:")

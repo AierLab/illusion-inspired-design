@@ -1,22 +1,18 @@
 from ._base import *
 import torch
-from torch.utils.data import DataLoader, TensorDataset, ConcatDataset
+from torch.utils.data import DataLoader, TensorDataset, ConcatDataset, Subset
 
-def dataset_filter(strength):
+def dataset_filter(strength, return_datasets=False):
     transform_train = transforms.Compose([
         transforms.Resize((224, 224)),  # Resize all images to 32x32
         transforms.RandomRotation(degrees=180),
         transforms.ToTensor(),   
-        transforms.Normalize(mean=[x / 255.0 for x in [0.507, 0.487, 0.441]],
-                                        std=[x / 255.0 for x in [0.267, 0.256, 0.276]])])
+])
 
     # Normalize test set same as training set without augmentation
     transform_test = transforms.Compose([
         transforms.Resize((224, 224)),  # Resize all images to 32x32
-        transforms.RandomRotation(degrees=180),
         transforms.ToTensor(),
-        transforms.Normalize(mean=[x / 255.0 for x in [0.507, 0.487, 0.441]],
-                                        std=[x / 255.0 for x in [0.267, 0.256, 0.276]])
     ])
 
 
@@ -31,12 +27,20 @@ def dataset_filter(strength):
         test_data_dir = f"datasets/indl/test/{dataset_folder}"
         
         # Create instances of MyDataset
-        trainset = MyDataset(train_data_dir, transforms=transform_train, strength=strength)
-        testset = MyDataset(test_data_dir, transforms=transform_test, strength=strength)
+        trainset = MyDataset(train_data_dir, transforms=transform_train)
+        testset = MyDataset(test_data_dir, transforms=transform_test)
+        
+        # Select 1/10 of the data
+        train_indices = np.random.choice(len(trainset), len(trainset), replace=False)
+        test_indices = np.random.choice(len(testset), len(testset), replace=False)
+        
+        # Create subsets
+        train_subset = Subset(trainset, train_indices)
+        test_subset = Subset(testset, test_indices)
         
         # Add datasets to the list
-        all_trainsets.append(trainset)
-        all_testsets.append(testset)
+        all_trainsets.append(train_subset)
+        all_testsets.append(test_subset)
 
     # Combine all training and testing datasets
     combined_trainset = ConcatDataset(all_trainsets)
@@ -63,4 +67,7 @@ def dataset_filter(strength):
     print(f"First training batch - Images shape: {train_images.shape}, Labels shape: {train_labels.shape}")
     print(f"First testing batch - Images shape: {test_images.shape}, Labels shape: {test_labels.shape}")
 
+    if return_datasets:
+        return combined_trainset, combined_testset
+    
     return trainloader_indl, testloader_indl

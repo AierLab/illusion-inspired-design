@@ -17,26 +17,24 @@ log_dir="log/$timestamp"
 mkdir -p $log_dir
 
 config_names=(
-    # "m_A-none-indl32"
-    # "m_A-none-indl224"
-
+    "m_A-none-indl32"
     "m_B-none-cifar100"
-    # "m_X-102-cifar100"
-    # "m_X-202-cifar100"
-    # "m_X-102_v2-cifar100"
-    # "m_X-103-cifar100"
+    "m_X-102-cifar100"
+    "m_X-102_v2-cifar100"
+    "m_X-103-cifar100"
+    "m_X-202-cifar100"
 
+    "m_A-none-indl224"
     "m_B-none-imagenet100"
-    # "m_X-102-imagenet100"
-    # "m_X-202-imagenet100"
-    # "m_X-102_v2-imagenet100"
-    # "m_X-103-imagenet100"
+    "m_X-102-imagenet100"
+    "m_X-102_v2-imagenet100"
+    "m_X-103-imagenet100"
+    "m_X-202-imagenet100"
 )
 
 model_names=(
-    # "vit_base_patch16_clip_384"
     "resnet50"
-    "vgg16"
+    # "vit_base_patch16_clip_384"
 )
 
 # ulimit -n 65536
