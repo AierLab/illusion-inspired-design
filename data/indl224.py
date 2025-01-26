@@ -46,8 +46,8 @@ combined_trainset = ConcatDataset(all_trainsets)
 combined_testset = ConcatDataset(all_testsets)
 
 # Create DataLoaders for the combined datasets
-trainloader_indl = DataLoader(combined_trainset, batch_size=256//8, shuffle=True)
-testloader_indl = DataLoader(combined_testset, batch_size=256//8, shuffle=False)
+trainloader_indl = DataLoader(combined_trainset, batch_size=256//8, shuffle=True, num_workers=num_workers, pin_memory=True)
+testloader_indl = DataLoader(combined_testset, batch_size=256//8, shuffle=False, num_workers=num_workers, pin_memory=True)
 
 # DataLoader summary
 print("\nInDL DataLoader Summary:")

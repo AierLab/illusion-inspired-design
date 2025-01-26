@@ -27,8 +27,8 @@ def dataset_filter(strength, return_datasets=False):
         test_data_dir = f"datasets/indl/test/{dataset_folder}"
         
         # Create instances of MyDataset
-        trainset = MyDataset(train_data_dir, transforms=transform_train)
-        testset = MyDataset(test_data_dir, transforms=transform_test)
+        trainset = MyDataset(train_data_dir, transforms=transform_train, strength=strength)
+        testset = MyDataset(test_data_dir, transforms=transform_test, strength=strength)
         
         # Select 1/10 of the data
         train_indices = np.random.choice(len(trainset), len(trainset), replace=False)
@@ -47,8 +47,8 @@ def dataset_filter(strength, return_datasets=False):
     combined_testset = ConcatDataset(all_testsets)
 
     # Create DataLoaders for the combined datasets
-    trainloader_indl = DataLoader(combined_trainset, batch_size=256//8, shuffle=True)
-    testloader_indl = DataLoader(combined_testset, batch_size=256//8, shuffle=False)
+    trainloader_indl = DataLoader(combined_trainset, batch_size=256//8, shuffle=True, num_workers=num_workers, pin_memory=True)
+    testloader_indl = DataLoader(combined_testset, batch_size=256//8, shuffle=False, num_workers=num_workers, pin_memory=True)
 
     # DataLoader summary
     print("\nInDL DataLoader Summary:")
