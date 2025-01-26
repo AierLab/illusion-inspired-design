@@ -6,7 +6,7 @@ import hydra
 from omegaconf import DictConfig, OmegaConf
 from pytorch_lightning.callbacks import ModelCheckpoint, LearningRateMonitor, EarlyStopping
 from hydra import initialize, compose
-# from pytorch_lightning import seed_everything
+from pytorch_lightning import seed_everything
 from pytorch_lightning.loggers import WandbLogger
 import wandb
 import os
@@ -165,6 +165,9 @@ def calculate_and_save_vector_shift(cfg, model):
 def main():
     
     args = parse_args()
+    
+    seed_everything(args.seed)
+    
     config_name = args.config_name
         
     # Initialize Hydra and compose the config
@@ -200,6 +203,7 @@ def parse_args():
     parser.add_argument('--config_name', type=str, help='Name of the configuration')
     parser.add_argument('--model_name', type=str, default=None, help='Name of the model we want to use (default: None)')
     parser.add_argument('--strength', type=float, default=None, help='Strength of illusion we want (default: None)')
+    parser.add_argument('--seed', type=int, default=42, help='Random seed (default: 42)')
     return parser.parse_args()
 
 
