@@ -8,7 +8,7 @@ from PIL import Image
 from torchvision import transforms
 from pytorch_lightning.loggers import WandbLogger
 from pytorch_lightning.callbacks import ModelCheckpoint, LearningRateMonitor
-from pytorch_lightning import seed_everything
+# from pytorch_lightning import seed_everything
 from sklearn.metrics import accuracy_score
 from torch.utils.data import ConcatDataset
 import torchvision
