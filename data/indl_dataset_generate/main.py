@@ -13,7 +13,7 @@ def main():
     planner = Planner(train_dir=args.train_dir, test_dir=args.test_dir, positive_ratio=0.5)
     
     def generate_dataset(dataset):
-        planner.generate(dataset, size=20000)
+        planner.generate(dataset, size=2000)
 
     datasets = [dataset01, dataset02, dataset03, dataset04, dataset05]
 
