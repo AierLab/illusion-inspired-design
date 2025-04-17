@@ -1,8 +1,9 @@
 defaults:
   - _base
+  - _self_
 
 data:
-  name: indl32
+  name: indl224
 
 model:
   task: "m_A"

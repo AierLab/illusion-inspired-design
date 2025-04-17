@@ -115,6 +115,12 @@ This project uses the **[INDL Dataset](https://github.com/AierLab/indl-dataset)*
 
 ---
 
+### Generate datasets
+
+create imagenet-1k in the datasets folder.
+
+run: `uv run .\data\indl_dataset_generate\main.py --train_dir datasets/indl/train --test_dir datasets/indl/test`
+
 ## Running the Training Pipeline
 
 To start training, simply execute the provided training script:

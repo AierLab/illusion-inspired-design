@@ -11,8 +11,8 @@ data:
 
 model:
   task: none
-  name: resnet50 # 默认模型名称，可根据需求更改
-  lr: 1e-3
+  name: eva02_large_patch14_448.mim_m38m_ft_in22k_in1k # 默认模型名称，可根据需求更改
+  lr: 1e-4
   num_classes: 100
   ckpt_path_A: none
   ckpt_path_B: none

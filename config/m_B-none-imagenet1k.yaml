@@ -1,5 +1,6 @@
 defaults:
   - _base
+  - _self_
 
 data:
   name: imagenet1k
@@ -12,4 +13,3 @@ model:
 trainer:
   max_epochs: 80
   patience: 10
-

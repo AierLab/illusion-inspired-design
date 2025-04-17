@@ -15,7 +15,7 @@ import argparse
 
 wandb.login(key="ef983325a8df31bd8b4f48223851b7e920c3f8ae")
 
-@hydra.main(version_base=None, config_path="config/train", config_name="default")
+@hydra.main(version_base=None, config_path="config", config_name="default")
 def train(cfg: DictConfig):    
     Model = m.get_model(model_name=cfg.model.task)
     train_dataloader, test_dataloader = data.get_dataloader(dataset_name=cfg.data.name)
@@ -172,7 +172,7 @@ def main():
     config_name = args.config_name
         
     # Initialize Hydra and compose the config
-    with initialize(config_path="config/train", version_base=None):
+    with initialize(config_path="config", version_base=None):
         cfg = compose(config_name=config_name)
         train(cfg)  # Call `train` with the composed config
         
