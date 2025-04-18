@@ -1,75 +1,50 @@
 from ._base import num_workers
-from datasets import load_dataset
-import datasets
+import os
 from torch.utils.data import DataLoader
 from torchvision import transforms
+from torchvision.datasets import ImageFolder
 import torch
-from PIL import Image
 
 def main(raw=False):
-
-    datasets.config.IN_MEMORY_MAX_SIZE = 230
-
-    # Define transformations for training and testing sets
+    # 定义 transforms（根据你之前的设定）
     transform_train = transforms.Compose([
-        transforms.Resize((226, 226)),  # Resize all images
-        transforms.RandomCrop(224),
+        transforms.Resize((500, 500)),
+        transforms.RandomCrop(448),
         transforms.RandomHorizontalFlip(),
         transforms.ToTensor(),
         transforms.Normalize(mean=[x / 255.0 for x in [0.507, 0.487, 0.441]],
-                            std=[x / 255.0 for x in [0.267, 0.256, 0.276]])])
-
-    transform_test = transforms.Compose([
-        transforms.Resize((224, 224)),  # Resize all images
-        transforms.ToTensor(),
-        transforms.Normalize(mean=[x / 255.0 for x in [0.507, 0.487, 0.441]],
-                            std=[x / 255.0 for x in [0.267, 0.256, 0.276]])
+                             std=[x / 255.0 for x in [0.267, 0.256, 0.276]])
     ])
 
-    # Load datasets
-    train_dataset = load_dataset('datasets/imagenet-1k', split='train', trust_remote_code=True, cache_dir="tmp/cache")
-    val_dataset = load_dataset('datasets/imagenet-1k', split='validation', trust_remote_code=True, cache_dir="tmp/cache")
+    transform_test = transforms.Compose([
+        transforms.Resize((448, 448)),
+        transforms.ToTensor(),
+        transforms.Normalize(mean=[x / 255.0 for x in [0.507, 0.487, 0.441]],
+                             std=[x / 255.0 for x in [0.267, 0.256, 0.276]])
+    ])
 
-    # Apply transformations manually
-    class TransformedDataset(torch.utils.data.Dataset):
-        def __init__(self, dataset, transform):
-            self.dataset = dataset
-            self.transform = transform
+    # 加载本地 ImageNet 1K 数据集（ImageFolder 格式）
+    root = os.path.join("datasets", "imagenet-1k")
+    train_path = os.path.join(root, "train")
+    val_path = os.path.join(root, "val")
 
-        def __len__(self):
-            return len(self.dataset)
+    train_dataset = ImageFolder(root=train_path, transform=transform_train)
+    val_dataset = ImageFolder(root=val_path, transform=transform_test)
 
-        def __getitem__(self, idx):
-            item = self.dataset[idx]
-            image = item['image']
-            label = item['label']
-            
-            # Check if the image has 3 channels
-            if image.mode != 'RGB': 
-                image = image.convert('RGB')
+    # 创建 DataLoaders
+    trainloader_imagenet1k = DataLoader(
+        train_dataset, batch_size=4, shuffle=True, num_workers=num_workers, pin_memory=True)
+    testloader_imagenet1k = DataLoader(
+        val_dataset, batch_size=4, shuffle=False, num_workers=num_workers, pin_memory=True)
 
-            # Apply transformations if the image has 3 channels
-            if self.transform:
-                image = self.transform(image)
-            
-            return image, label
-
-    # Wrap datasets with transformations
-    trainset_transformed = TransformedDataset(train_dataset, transform_train)
-    valset_transformed = TransformedDataset(val_dataset, transform_test)
-
-    # Create DataLoaders for transformed datasets
-    trainloader_imagenet1k = DataLoader(trainset_transformed, batch_size=256, shuffle=True, num_workers=num_workers, pin_memory=True)
-    testloader_imagenet1k = DataLoader(valset_transformed, batch_size=256, shuffle=False, num_workers=num_workers, pin_memory=True)
-
-    # Output DataLoader summary
+    # 输出数据信息
     print("\nImageNet-1k DataLoader Summary:")
-    print(f"Total training samples: {len(trainset_transformed)}")
-    print(f"Total validation samples: {len(valset_transformed)}")
+    print(f"Total training samples: {len(train_dataset)}")
+    print(f"Total validation samples: {len(val_dataset)}")
     print(f"Training batches: {len(trainloader_imagenet1k)}")
     print(f"Validation batches: {len(testloader_imagenet1k)}")
 
-    # Display the first batch to verify data shapes
+    # 输出首个 batch 验证数据形状
     first_train_batch = next(iter(trainloader_imagenet1k))
     first_val_batch = next(iter(testloader_imagenet1k))
 
@@ -78,9 +53,8 @@ def main(raw=False):
 
     print(f"First training batch - Images shape: {train_images.shape}, Labels shape: {train_labels.shape}")
     print(f"First validation batch - Images shape: {val_images.shape}, Labels shape: {val_labels.shape}")
-    
-    
+
     if raw:
-        # Return raw datasets if requested
         return train_dataset, val_dataset
+
     return trainloader_imagenet1k, testloader_imagenet1k

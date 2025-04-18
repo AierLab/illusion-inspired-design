@@ -16,3 +16,5 @@ datasets
 tmp
 log
 checkpoints
+logs
+.ipynb_checkpoints

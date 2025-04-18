@@ -5,7 +5,7 @@ from torch.utils.data import DataLoader, TensorDataset, ConcatDataset
 def main(raw=False):
 
     transform_train = transforms.Compose([
-        transforms.Resize((224, 224)),  # Resize all images to 224x224
+        transforms.Resize((448, 448)),  # Resize all images to 224x224
         transforms.RandomHorizontalFlip(),
         transforms.RandomRotation(90),  # Random rotation up to 15 degrees
         transforms.RandomAffine(0, translate=(0.1, 0.1)),  # Random translation up to 10% of image size
@@ -15,7 +15,7 @@ def main(raw=False):
 
     # Normalize test set same as training set without augmentation
     transform_test = transforms.Compose([
-        transforms.Resize((224, 224)),  # Resize all images to 224x224
+        transforms.Resize((448, 448)),  # Resize all images to 224x224
         transforms.RandomHorizontalFlip(),
         transforms.RandomRotation(90),  # Random rotation up to 15 degrees
         transforms.RandomAffine(0, translate=(0.1, 0.1)),  # Random translation up to 10% of image size
@@ -49,8 +49,8 @@ def main(raw=False):
     combined_testset = ConcatDataset(all_testsets)
 
     # Create DataLoaders for the combined datasets
-    trainloader_indl = DataLoader(combined_trainset, batch_size=200, shuffle=True)
-    testloader_indl = DataLoader(combined_testset, batch_size=200, shuffle=False)
+    trainloader_indl = DataLoader(combined_trainset, batch_size=4, shuffle=True)
+    testloader_indl = DataLoader(combined_testset, batch_size=4, shuffle=False)
 
     # DataLoader summary
     print("\nInDL DataLoader Summary:")

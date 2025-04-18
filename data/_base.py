@@ -19,9 +19,9 @@ class MyDataset(Dataset):
 
     def __getitem__(self, item):
         item = int(item)  # Ensure item is an integer
-        path_img, label = self.data_info.iloc[item][1:3]
+        path_img, label = self.data_info.iloc[item][0:2]
         label = torch.tensor(int(label))  # Convert label to a tensor
-        path_img = os.path.join(self.data_dir, path_img)
+        path_img = os.path.join(self.data_dir, str(path_img))
         image = Image.open(path_img).convert('RGB')
         if self.transforms is not None:
             image = self.transforms(image)

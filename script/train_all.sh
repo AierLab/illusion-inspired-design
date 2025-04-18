@@ -14,8 +14,8 @@ log_dir="log/$timestamp"
 mkdir -p $log_dir
 
 config_names=(
-    "m_A-none-indl224"
-    "m_B-none-imagenet1k"
+    # "m_A-none-indl224"
+    # "m_B-none-imagenet1k"
     "m_X-103-imagenet1k"
 )
 
@@ -24,6 +24,7 @@ config_names=(
 
 for config_name in "${config_names[@]}"
 do
+    echo "Start: $config_name"
     python train.py --config_name "$config_name" &> "$log_dir/$config_name.log"    
     echo "Done: $config_name"
     echo "Log: $log_dir/$config_name.log"

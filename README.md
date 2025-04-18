@@ -175,3 +175,4 @@ If you have any questions or would like to discuss this project further, please 
 
 **Let's shape the future of computer vision, one illusion at a time.**
 
+apt install pigz aria2
